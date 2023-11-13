@@ -4,7 +4,7 @@ import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { BiLogoGmail } from "react-icons/bi";
 // import { BsPersonLinesFill } from "react-icons/bs";
 import { HiOutlineChevronDoubleUp } from "react-icons/hi";
-import contactImage from "../../../public/assets/contactimage.jpeg";
+import contactImage from "../../../public/assets/contactImage.jpeg";
 import Link from "next/link";
 
 const Contact = () => {
