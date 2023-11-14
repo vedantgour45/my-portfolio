@@ -73,7 +73,7 @@ const Contact = () => {
               <form
                 name="contact"
                 method="POST"
-                action="/success"
+                action="/success/"
                 data-netlify="true"
               >
                 <div className="grid md:grid-cols-2 gap-4 w-full py-2">
