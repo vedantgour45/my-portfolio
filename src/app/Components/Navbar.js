@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable react/no-unescaped-entities */
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -9,7 +10,7 @@ import Link from "next/link";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { BiLogoGmail } from "react-icons/bi";
-import { BsPersonLinesFill } from "react-icons/bs";
+// import { BsPersonLinesFill } from "react-icons/bs";
 import { usePathname } from "next/navigation";
 
 const Navbar = () => {

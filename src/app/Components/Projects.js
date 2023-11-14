@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+
 import React from "react";
 import project1 from "../../../public/assets/project1-linkedin.jpg";
 import project2 from "../../../public/assets/project2-typingtest.png";

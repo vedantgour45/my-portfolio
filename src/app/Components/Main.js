@@ -1,7 +1,9 @@
+/* eslint-disable react/no-unescaped-entities */
+
 import React from "react";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { BiLogoGmail } from "react-icons/bi";
-import { BsPersonLinesFill } from "react-icons/bs";
+// import { BsPersonLinesFill } from "react-icons/bs";
 
 const Main = () => {
   return (
