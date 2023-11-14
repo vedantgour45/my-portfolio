@@ -1,5 +1,5 @@
 import React from "react";
-import project1 from "../../../public/assets/project1-linkedin.png";
+import project1 from "../../../public/assets/project1-linkedin.jpg";
 import project2 from "../../../public/assets/project2-typingtest.png";
 import project3 from "../../../public/assets/project3-bankist.png";
 import project4 from "../../../public/assets/project4-numbergame.png";

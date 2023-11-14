@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import linkedinImage from "../../../public/assets/project1-linkedin.png";
+import linkedinImage from "../../../public/assets/project1-linkedin.jpg";
 import { CgCircleci } from "react-icons/cg";
 import Link from "next/link";
 

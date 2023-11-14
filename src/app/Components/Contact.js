@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import React from "react";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
@@ -8,6 +9,10 @@ import contactImage from "../../../public/assets/contactImage.jpeg";
 import Link from "next/link";
 
 const Contact = () => {
+  // const handleSubmit = () => {
+  //   alert("Form submitted successfully!!");
+  // };
+
   return (
     <div id="contact" className="w-full lg:h-screen p-2 pt-20">
       <div className="max-w-[1240px] m-auto px-2 py-16 w-full">
@@ -68,8 +73,8 @@ const Contact = () => {
               <form
                 name="contact"
                 method="POST"
-                data-netlify="true"
-                onSubmit="submit"
+                // data-netlify="true"
+                // onSubmit={handleSubmit}
               >
                 <div className="grid md:grid-cols-2 gap-4 w-full py-2">
                   <div className="flex flex-col">
@@ -124,7 +129,7 @@ const Contact = () => {
                     name="message"
                   ></textarea>
                 </div>
-                <button className="w-full p-4 text-gray-100 mt-4" type="submit">
+                <button className="w-full p-4 text-gray-100 mt-4">
                   Send Message
                 </button>
               </form>
