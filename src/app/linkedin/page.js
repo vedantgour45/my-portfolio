@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import linkedin from "../../../public/assets/project1-linkedin.png";
+import linkedinImage from "../../../public/assets/project1-linkedin.png";
 import { CgCircleci } from "react-icons/cg";
 import Link from "next/link";
 
@@ -11,7 +11,7 @@ const LinkedinPage = () => {
         <div className="absolute top-0 left-0 w-full h-[30vh] lg:h-[40vh] bg-black/80 z-10"></div>
         <Image
           className="absolute z-1"
-          src={linkedin}
+          src={linkedinImage}
           alt="projectimage"
           layout="fill"
           objectFit="cover"
@@ -23,7 +23,7 @@ const LinkedinPage = () => {
       </div>
       <div className="max-w-[1240px] mx-auto p-2 grid md:grid-cols-5 gap-8 pt-8">
         <div className="col-span-4">
-          <p className="text-xl tracking-widest uppercase text-[#7f6240]">
+          <p className="text-xl tracking-widest uppercase text-[#5651e5]">
             Project
           </p>
           <h2 className="py-4">Overview</h2>
