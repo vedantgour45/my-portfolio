@@ -16,7 +16,7 @@ const SpecificProject = ({
         alt="projectPhoto"
       />
       <div className="hidden group-hover:block absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-        <h3 className="text-xl text-white tracking-wider text-center py-36">
+        <h3 className="text-xl text-white tracking-wider text-center py-3">
           {projectName}
         </h3>
         {/* <p className="pb-4 pt-2 text-white text-center">{projectTechStack}</p> */}
