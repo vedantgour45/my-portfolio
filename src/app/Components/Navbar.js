@@ -72,9 +72,9 @@ const Navbar = () => {
         {/* For lazy loading used Image */}
         <Link href="/">
           {navlogoSwitch ? (
-            <Image src={navLogoWhite} alt="nav-logo" width="50" height="50" />
+            <Image src={navLogoWhite} alt="nav-logo" width="50" height="auto" />
           ) : (
-            <Image src={navlogo} alt="nav-logo" width="50" height="50" />
+            <Image src={navlogo} alt="nav-logo" width="50" height="auto" />
           )}
         </Link>
         {/* Menu */}

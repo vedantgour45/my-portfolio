@@ -15,7 +15,7 @@ import SpecificSkill from "./SpecificSkill";
 
 const Skills = () => {
   return (
-    <div id="skills" className="w-full lg:h-screen p-2">
+    <div id="skills" className="w-full lg:h-screen p-2 pt-20">
       <div className="max-w-[1240px] mx-auto flex justify-center flex-col h-full">
         <p className="text-xl tracking-widest uppercase text-[#7f6240]">
           Skills

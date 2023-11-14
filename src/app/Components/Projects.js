@@ -10,8 +10,8 @@ import SpecificProject from "./SpecificProject";
 
 const Projects = () => {
   return (
-    <div id="projects" className="w-full p-2 pt-20">
-      <div className="max-w-[1240px] mx-auto px-2 py-16">
+    <div id="projects" className="w-full px-2 pt-20">
+      <div className="max-w-[1240px] mx-auto px-2">
         <p className="text-xl tracking-widest uppercase text-[#7f6240]">
           Projects
         </p>

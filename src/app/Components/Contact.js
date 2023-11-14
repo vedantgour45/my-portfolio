@@ -14,8 +14,8 @@ const Contact = () => {
   // };
 
   return (
-    <div id="contact" className="w-full lg:h-screen p-2 pt-20">
-      <div className="max-w-[1240px] m-auto px-2 py-16 w-full">
+    <div id="contact" className="w-full lg:h-screen px-2 pt-20">
+      <div className="max-w-[1240px] m-auto px-2 w-full">
         <p className="text-xl tracking-widest uppercase text-[#7f6240]">
           Contact
         </p>
@@ -75,7 +75,9 @@ const Contact = () => {
                 method="POST"
                 // action="/success/"
                 data-netlify="true"
+                data-netlify-honeypot="bot-field"
               >
+                <input type="hidden" name="form-name" value="contact" />
                 <div className="grid md:grid-cols-2 gap-4 w-full py-2">
                   <div className="flex flex-col">
                     <label htmlFor="name" className="uppercase text-sm py-2">
