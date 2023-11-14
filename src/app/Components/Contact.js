@@ -72,7 +72,8 @@ const Contact = () => {
             <div className="p-4 flex flex-col justify-around">
               <form
                 name="contact"
-                method="POST"
+                netlify
+                // method="POST"
                 // data-netlify="true"
                 // onSubmit={handleSubmit}
               >
@@ -129,7 +130,7 @@ const Contact = () => {
                     name="message"
                   ></textarea>
                 </div>
-                <button className="w-full p-4 text-gray-100 mt-4">
+                <button className="w-full p-4 text-gray-100 mt-4" type="submit">
                   Send Message
                 </button>
               </form>
