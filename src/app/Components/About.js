@@ -36,7 +36,7 @@ const About = () => {
 
           {/* </div> */}
         </div>
-        <div className="w-full h-auto m-auto flex items-center justify-center">
+        <div className="py-7 w-full h-auto m-auto flex items-center md:justify-center md:py-0">
           <Image
             className="shadow-xl shadow-gray-400 rounded-lg p-4 hover:scale-105 ease-in duration-300"
             src={profilePicture}

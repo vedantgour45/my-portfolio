@@ -7,8 +7,8 @@ import Link from "next/link";
 const LinkedinPage = () => {
   return (
     <div className="w-full">
-      <div className="w-sceen h-[30vh] lg:h-[40vh] relative">
-        <div className="absolute top-0 left-0 w-full h-[30vh] lg:h-[40vh] bg-black/80 z-10"></div>
+      <div className="w-sceen h-[30vh] lg:h-[40vh] sticky top-0">
+        <div className="absolute top-0 left-0 w-full h-[30vh] lg:h-[40vh] bg-black/90 z-10"></div>
         <Image
           className="absolute z-1"
           src={linkedinImage}
@@ -23,7 +23,7 @@ const LinkedinPage = () => {
       </div>
       <div className="max-w-[1240px] mx-auto p-2 grid md:grid-cols-5 gap-8 pt-8">
         <div className="col-span-4">
-          <p className="text-xl tracking-widest uppercase text-[#5651e5]">
+          <p className="text-xl tracking-widest uppercase text-[#7f6240]">
             Project
           </p>
           <h2 className="py-4">Overview</h2>
@@ -52,7 +52,7 @@ const LinkedinPage = () => {
             <p className="underline cursor-pointer mt-7">Back</p>
           </Link>
         </div>
-        <div className="col-span-4 md:col-span-1 shadow-xl shadow-gray-400 rounded-xl p-4">
+        <div className="col-span-4 md:col-span-1 shadow-xl shadow-gray-400 rounded-xl p-4 border border-neutral-200">
           <div className="p-2">
             <p className="font-bold pb-2">Technologies used</p>
             <div className="grid grid-cols-2 md:grid-cols-1">

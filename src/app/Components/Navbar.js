@@ -107,7 +107,7 @@ const Navbar = () => {
             </Link>
           </ul>
           <div className="md:hidden cursor-pointer" onClick={handleOpen}>
-            <AiOutlineMenu size={25} />
+            <AiOutlineMenu style={{ color: linkColor }} size={25} />
           </div>
         </div>
       </div>
