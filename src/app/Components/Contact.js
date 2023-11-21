@@ -6,7 +6,7 @@ import { BiLogoGmail } from "react-icons/bi";
 // import { BsPersonLinesFill } from "react-icons/bs";
 import { HiOutlineChevronDoubleUp } from "react-icons/hi";
 import contactImage from "../../../public/assets/contactImage.jpeg";
-import Link from "next/link";
+// import Link from "next/link";
 
 const Contact = () => {
   // const handleSubmit = () => {
@@ -142,11 +142,11 @@ const Contact = () => {
           </div>
         </div>
         <div className="flex justify-center py-12">
-          <Link href="/#home">
+          <a href="/#home">
             <div className="rounded-full shadow-lg shadow-gray-400 my-10 p-4 cursor-pointer  animate-bounce">
               <HiOutlineChevronDoubleUp className="text-[#7f6240]" size={20} />
             </div>
-          </Link>
+          </a>
         </div>
         <p className="flex justify-center -mt-20">Back To Top</p>
       </div>

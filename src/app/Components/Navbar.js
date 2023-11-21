@@ -6,7 +6,7 @@ import Image from "next/image";
 import React from "react";
 import navlogo from "../../../public/assets/main-logo2.png";
 import navLogoWhite from "../../../public/assets/main-logo2-white.png";
-import Link from "next/link";
+// import Link from "next/link";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { BiLogoGmail } from "react-icons/bi";
@@ -70,41 +70,41 @@ const Navbar = () => {
     >
       <div className="flex justify-between items-center w-full h-full px-2 2xl:px-16">
         {/* For lazy loading used Image */}
-        <Link href="/">
+        <a href="/">
           {navlogoSwitch ? (
             <Image src={navLogoWhite} alt="nav-logo" width="50" height="auto" />
           ) : (
             <Image src={navlogo} alt="nav-logo" width="50" height="auto" />
           )}
-        </Link>
+        </a>
         {/* Menu */}
         <div>
           <ul style={{ color: `${linkColor}` }} className="hidden md:flex">
-            <Link href="/#home">
+            <a href="/#home">
               <li className="ml-10 text-sm uppercase hover:border-b border-neutral-400">
                 Home
               </li>
-            </Link>
+            </a>
             <a href="/#about">
               <li className="ml-10 text-sm uppercase hover:border-b border-neutral-400">
                 About
               </li>
             </a>
-            <Link href="/#skills">
+            <a href="/#skills">
               <li className="ml-10 text-sm uppercase hover:border-b border-neutral-400">
                 Skills
               </li>
-            </Link>
-            <Link href="/#projects">
+            </a>
+            <a href="/#projects">
               <li className="ml-10 text-sm uppercase hover:border-b border-neutral-400">
                 Projects
               </li>
-            </Link>
-            <Link href="/#contact">
+            </a>
+            <a href="/#contact">
               <li className="ml-10 text-sm uppercase hover:border-b border-neutral-400">
                 Contact
               </li>
-            </Link>
+            </a>
           </ul>
           <div className="md:hidden cursor-pointer" onClick={handleOpen}>
             <AiOutlineMenu style={{ color: linkColor }} size={25} />
@@ -129,9 +129,9 @@ const Navbar = () => {
         >
           <div>
             <div className="flex justify-between items-center w-full">
-              <Link href="/#home">
+              <a href="/#home">
                 <Image src={navlogo} alt="nav-logo" height={45} width={45} />
-              </Link>
+              </a>
               <div
                 onClick={handleOpen}
                 className="rounded-full shadow-lg shadow-gray-400 p-3 cursor-pointer"
@@ -147,31 +147,31 @@ const Navbar = () => {
           </div>
           <div className="py-4 flex flex-col">
             <ul className="uppercase">
-              <Link href="/#home">
+              <a href="/#home">
                 <li onClick={handleSideMenu} className="py-4 text-sm">
                   Home
                 </li>
-              </Link>
-              <Link href="/#about">
+              </a>
+              <a href="/#about">
                 <li onClick={handleSideMenu} className="py-4 text-sm">
                   About
                 </li>
-              </Link>
-              <Link href="/#skills">
+              </a>
+              <a href="/#skills">
                 <li onClick={handleSideMenu} className="py-4 text-sm">
                   Skills
                 </li>
-              </Link>
-              <Link href="/#projects">
+              </a>
+              <a href="/#projects">
                 <li onClick={handleSideMenu} className="py-4 text-sm">
                   Projects
                 </li>
-              </Link>
-              <Link href="/#contact">
+              </a>
+              <a href="/#contact">
                 <li onClick={handleSideMenu} className="py-4 text-sm">
                   Contact
                 </li>
-              </Link>
+              </a>
             </ul>
 
             <div className="pt-20">
