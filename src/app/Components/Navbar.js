@@ -85,11 +85,11 @@ const Navbar = () => {
                 Home
               </li>
             </Link>
-            <Link href="/#about">
+            <a href="/#about">
               <li className="ml-10 text-sm uppercase hover:border-b border-neutral-400">
                 About
               </li>
-            </Link>
+            </a>
             <Link href="/#skills">
               <li className="ml-10 text-sm uppercase hover:border-b border-neutral-400">
                 Skills
