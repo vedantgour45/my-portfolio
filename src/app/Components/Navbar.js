@@ -28,7 +28,8 @@ const Navbar = () => {
       route === "/typingtest" ||
       route === "/bankist" ||
       route === "/guessmynumber" ||
-      route === "/textconverter"
+      route === "/textconverter" ||
+      route === "/movix"
     ) {
       setNavBg("transparent");
       setLinkColor("#ecf0f3");

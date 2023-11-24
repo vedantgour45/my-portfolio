@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 
 import React from "react";
+import movix from "../../../public/assets/project-movix.png";
 import project1 from "../../../public/assets/project1-linkedin.jpg";
 import project2 from "../../../public/assets/project2-typingtest.png";
 import project3 from "../../../public/assets/project3-bankist.png";
@@ -17,6 +18,12 @@ const Projects = () => {
         </p>
         <h2 className="py-4">What I've Built</h2>
         <div className="grid md:grid-cols-2 gap-8">
+          <SpecificProject
+            projectImage={movix}
+            projectName="Movix"
+            projectLink="/movix"
+            // projectTechStack="React.js | Firebase | Styled Icon"
+          />
           <SpecificProject
             projectImage={project1}
             projectName="LinkedIn Clone"
