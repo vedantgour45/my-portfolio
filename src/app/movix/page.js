@@ -32,8 +32,8 @@ const Movix = () => {
             TV shows, providing information such as trailers, cast details,
             ratings, directors, writers, and more. The app includes various
             sections like Similar, Popular, Trending, and Top Rated to enhance
-            the user's entertainment experience.
-            {/* <br />
+            the user&apos;s entertainment experience.
+            <br />
             <b> Features: </b>
             <br />
             Browse movies and TV shows by categories.
@@ -43,7 +43,7 @@ const Movix = () => {
             <br />
             Explore sections such as Similar, Popular, Trending, and Top Rated.
             <br />
-            Infinite scrolling, Skeleton loading and many more. */}
+            Infinite scrolling, Skeleton loading and many more.
           </p>
           <div>
             <a href="https://movix-movies.netlify.app/" target="_blank">
