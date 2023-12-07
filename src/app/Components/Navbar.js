@@ -79,7 +79,7 @@ const Navbar = () => {
           )}
         </a>
         {/* Menu */}
-        <div>
+        <div className="font-bold">
           <ul style={{ color: `${linkColor}` }} className="hidden md:flex">
             <a href="/#home">
               <li className="ml-10 text-sm uppercase hover:border-b border-neutral-400">

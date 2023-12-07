@@ -11,6 +11,7 @@ import nextIcon from "../../../public/skills/next-icon.svg";
 import firebaseIcon from "../../../public/skills/firebase-icon.svg";
 import gitIcon from "../../../public/skills/git-icon.svg";
 import mySqlIcon from "../../../public/skills/mysql-icon.svg";
+import tailwindCSS from "../../../public/skills/tailwind-css-icon.svg";
 import SpecificSkill from "./SpecificSkill";
 
 const Skills = () => {
@@ -33,21 +34,6 @@ const Skills = () => {
             skillImageAltText="cssIcon"
           />
           <SpecificSkill
-            skillName="SCSS"
-            skillImage={scssIcon}
-            skillImageAltText="scssIcon"
-          />
-          <SpecificSkill
-            skillName="Bootstrap"
-            skillImage={bootstrapIcon}
-            skillImageAltText="bootstrapIcon"
-          />
-          <SpecificSkill
-            skillName="Material UI"
-            skillImage={muiIcon}
-            skillImageAltText="muiIcon"
-          />
-          <SpecificSkill
             skillName="JavaScript"
             skillImage={jsIcon}
             skillImageAltText="jsIcon"
@@ -58,9 +44,14 @@ const Skills = () => {
             skillImageAltText="reactIcon"
           />
           <SpecificSkill
-            skillName="Redux"
+            skillName="Redux Toolkit"
             skillImage={reduxIcon}
             skillImageAltText="reduxIcon"
+          />
+          <SpecificSkill
+            skillName="Tailwind CSS"
+            skillImage={tailwindCSS}
+            skillImageAltText="tailwind"
           />
           <SpecificSkill
             skillName="Next.js"
@@ -68,9 +59,24 @@ const Skills = () => {
             skillImageAltText="nextIcon"
           />
           <SpecificSkill
+            skillName="SCSS"
+            skillImage={scssIcon}
+            skillImageAltText="scssIcon"
+          />
+          <SpecificSkill
             skillName="Firebase"
             skillImage={firebaseIcon}
             skillImageAltText="firebaseIcon"
+          />
+          <SpecificSkill
+            skillName="Material UI"
+            skillImage={muiIcon}
+            skillImageAltText="muiIcon"
+          />
+          <SpecificSkill
+            skillName="Bootstrap"
+            skillImage={bootstrapIcon}
+            skillImageAltText="bootstrapIcon"
           />
           <SpecificSkill
             skillName="Git"
