@@ -33,8 +33,8 @@ const About = () => {
             Currently, I'm expanding my skill set further by diving into the
             realms of <b>Next.js</b>, a powerful React framework for building
             server-rendered and statically generated web applications.
-            Additionally, I'm harnessing the efficiency and flexibility of
-            <b>Tailwind CSS</b> to streamline my styling process and enhance the
+            Additionally, I'm harnessing the efficiency and flexibility of 
+            <b> Tailwind CSS</b> to streamline my styling process and enhance the
             visual appeal of my projects.
           </p>
 
