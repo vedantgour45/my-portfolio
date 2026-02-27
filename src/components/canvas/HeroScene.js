@@ -32,10 +32,10 @@ function ParticleCloud({ count = 2000 }) {
         <bufferAttribute attach="attributes-position" count={count} array={positions} itemSize={3} />
       </bufferGeometry>
       <pointsMaterial 
-        size={0.07} 
+        size={0.1} 
         color="#818cf8" 
         transparent 
-        opacity={theme === "light" ? 0.2 : 0.4} 
+        opacity={theme === "light" ? 0.3 : 0.6} 
         sizeAttenuation 
         depthWrite={false} 
         blending={THREE.AdditiveBlending} 
@@ -168,7 +168,7 @@ function Starfield({ count = 4000 }) {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" count={count} array={positions} itemSize={3} />
       </bufferGeometry>
-      <pointsMaterial size={0.12} color="#ffffff" transparent opacity={0.3} sizeAttenuation depthWrite={false} />
+      <pointsMaterial size={0.18} color="#ffffff" transparent opacity={0.4} sizeAttenuation depthWrite={false} />
     </points>
   );
 }
@@ -197,7 +197,6 @@ export default function HeroScene() {
         <pointLight position={[-10, -10, -10]} intensity={0.5} color="#6366f1" />
 
         <Suspense fallback={null}>
-          <InteractiveCore />
           <ParticleCloud />
           <Starfield />
         </Suspense>
