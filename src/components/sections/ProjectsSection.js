@@ -18,88 +18,54 @@ const cardVariants = {
   }),
 };
 
+import Link from "next/link";
+
 function ProjectCard({ project, index }) {
   return (
     <motion.div
       custom={index}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.15 }}
+      viewport={{ once: true, amount: 0.1 }}
       variants={cardVariants}
-      className="group relative rounded-3xl overflow-hidden bg-white/[0.02] dark:bg-white/[0.02] border border-white/5 dark:border-white/5 hover:border-indigo-500/30 transition-all duration-500"
+      className="group relative aspect-square rounded-2xl overflow-hidden bg-white/[0.02] border border-white/5 hover:border-indigo-500/50 transition-all duration-500 cursor-pointer"
     >
-      {/* Project Image */}
-      <div className="relative h-56 overflow-hidden">
+      <Link href={`/project/${project.slug}`} className="block h-full w-full">
+        {/* Project Image with Blur Effect */}
         <Image
           src={project.image}
           alt={project.title}
           fill
-          className="object-cover group-hover:scale-110 transition-transform duration-700"
+          className="object-cover transition-all duration-700 group-hover:scale-110 group-hover:blur-sm brightness-[0.8] group-hover:brightness-[0.4]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
 
-        {/* Badge */}
-        <div className="absolute top-4 left-4">
-          <span className="text-[9px] uppercase tracking-[0.3em] font-bold text-indigo-400 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
-            PROJECT_{String(project.id).padStart(2, "0")}
-          </span>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="p-8">
-        <h3 className="text-2xl font-bold mb-1 tracking-tight group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-indigo-500 group-hover:via-purple-500 group-hover:to-pink-500 group-hover:bg-clip-text transition-all">
-          {project.title}
-        </h3>
-        <p className="text-sm text-indigo-400 font-medium mb-4">
-          {project.subtitle}
-        </p>
-        <p className="text-gray-400 text-sm leading-relaxed mb-6">
-          {project.description}
-        </p>
-
-        {/* Tech Stack */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {project.tech.map((t) => (
-            <span
-              key={t}
-              className="text-[10px] px-3 py-1.5 rounded-full bg-white/5 border border-white/5 text-gray-400 font-medium tracking-wider"
-            >
-              {t}
-            </span>
-          ))}
+        {/* Dynamic Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent group-hover:from-black/60 group-hover:to-black/40 transition-all duration-500" />
+        
+        {/* Sliding Text Overlay */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
+           <div 
+             className="flex flex-col items-center transform translate-y-[135px] group-hover:translate-y-0 transition-transform duration-700 cubic-bezier(0.22, 1, 0.36, 1)"
+           >
+             <h3 className="text-xl md:text-2xl font-black tracking-tighter text-white uppercase">
+               {project.title}
+             </h3>
+             <span className="text-[9px] uppercase tracking-[0.4em] text-indigo-400 font-bold opacity-0 group-hover:opacity-100 transition-all duration-500 mt-3">
+                VIEW PROJECT DETAILS
+             </span>
+           </div>
         </div>
 
-        {/* Links */}
-        <div className="flex gap-4">
-          <a
-            href={project.demo}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[10px] uppercase tracking-[0.2em] font-bold text-white hover:text-indigo-400 transition-colors flex items-center gap-2"
-          >
-            <span className="w-5 h-[1px] bg-indigo-500" /> Live Demo
-          </a>
-          <a
-            href={project.code}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-500 hover:text-white transition-colors flex items-center gap-2"
-          >
-            <span className="w-5 h-[1px] bg-white/20" /> Source
-          </a>
-        </div>
-      </div>
-
-      {/* Hover glow */}
-      <div className="absolute -inset-px bg-gradient-to-b from-indigo-500/0 via-indigo-500/0 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl" />
+        {/* Interactive Border Effect */}
+        <div className="absolute inset-0 ring-1 ring-inset ring-white/10 group-hover:ring-indigo-500/50 transition-all rounded-2xl" />
+      </Link>
     </motion.div>
   );
 }
 
 export default function ProjectsSection() {
   return (
-    <section id="projects" className="py-32 relative overflow-hidden">
+    <section id="projects" className="py-32 relative overflow-hidden bg-black">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <motion.div
@@ -113,12 +79,12 @@ export default function ProjectsSection() {
             PORTFOLIO
           </span>
           <h2 className="text-5xl md:text-7xl font-black mt-4 tracking-tighter">
-            PROJECT<span className="text-gradient">.</span>LOG
+            PROJ<span className="text-gradient">.</span>ECTS
           </h2>
         </motion.div>
 
-        {/* Project Grid */}
-        <div className="grid md:grid-cols-2 gap-8">
+        {/* Project Grid - Now more compact */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, i) => (
             <ProjectCard key={project.id} project={project} index={i} />
           ))}

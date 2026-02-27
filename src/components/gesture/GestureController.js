@@ -48,7 +48,6 @@ export default function GestureController() {
   const gestureState = useRef("none");
   const cursorAnimId = useRef(null);
 
-  // Swipe logic
   const lastSwipeTime = useRef(0);
   const previousX = useRef(null);
   const previousTime = useRef(0);
@@ -99,7 +98,7 @@ export default function GestureController() {
     if (el) { el.click(); }
   }, []);
 
-  const drawSkeletons = useCallback((handLm, faceLm, canvas, video) => {
+  const drawSkeletons = useCallback((handResults, faceLm, canvas, video) => {
     const ctx = canvas.getContext("2d");
     canvas.width = video.videoWidth; canvas.height = video.videoHeight;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -121,23 +120,26 @@ export default function GestureController() {
     }
 
     // High-Visibility Hand (Gradient Bones)
-    if (handLm) {
-      ctx.lineWidth = 3; ctx.lineCap = "round";
-      for (const [i, j] of HAND_CONNECTIONS) {
-        const ax = handLm[i].x * w, ay = handLm[i].y * h;
-        const bx = handLm[j].x * w, by = handLm[j].y * h;
-        const grad = ctx.createLinearGradient(ax, ay, bx, by);
-        grad.addColorStop(0, "#818cf8"); grad.addColorStop(1, "#c084fc");
-        ctx.strokeStyle = grad; ctx.beginPath();
-        ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
-      }
-      for (let i = 0; i < handLm.length; i++) {
-        ctx.beginPath(); ctx.arc(handLm[i].x * w, handLm[i].y * h, 2, 0, Math.PI * 2);
-        ctx.fillStyle = (i === 4 || i === 8) ? "#fff" : "#818cf8"; ctx.fill();
-        if (i === 4 || i === 8) {
-          ctx.shadowBlur = 10; ctx.shadowColor = "#fff";
-          ctx.beginPath(); ctx.arc(handLm[i].x * w, handLm[i].y * h, 3.5, 0, Math.PI * 2);
-          ctx.stroke(); ctx.shadowBlur = 0;
+    if (handResults?.landmarks) {
+      const handLm = handResults.landmarks[0];
+      if (handLm) {
+        ctx.lineWidth = 3; ctx.lineCap = "round";
+        for (const [i, j] of HAND_CONNECTIONS) {
+          const ax = handLm[i].x * w, ay = handLm[i].y * h;
+          const bx = handLm[j].x * w, by = handLm[j].y * h;
+          const grad = ctx.createLinearGradient(ax, ay, bx, by);
+          grad.addColorStop(0, "#818cf8"); grad.addColorStop(1, "#c084fc");
+          ctx.strokeStyle = grad; ctx.beginPath();
+          ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
+        }
+        for (let i = 0; i < handLm.length; i++) {
+          ctx.beginPath(); ctx.arc(handLm[i].x * w, handLm[i].y * h, 2, 0, Math.PI * 2);
+          ctx.fillStyle = (i === 4 || i === 8) ? "#fff" : "#818cf8"; ctx.fill();
+          if (i === 4 || i === 8) {
+            ctx.shadowBlur = 10; ctx.shadowColor = "#fff";
+            ctx.beginPath(); ctx.arc(handLm[i].x * w, handLm[i].y * h, 3.5, 0, Math.PI * 2);
+            ctx.stroke(); ctx.shadowBlur = 0;
+          }
         }
       }
     }
@@ -192,6 +194,10 @@ export default function GestureController() {
     const start = async () => {
       setIsLoading(true);
       try {
+        if (!window.isSecureContext && window.location.hostname !== "localhost") {
+          throw new Error("Security Error: Gesture controls require a secure (HTTPS) connection.");
+        }
+
         // Wait for models if they aren't ready yet
         let attempts = 0;
         while ((!landmarker.current || !faceLandmarker.current) && attempts < 50) {
@@ -200,9 +206,19 @@ export default function GestureController() {
           attempts++;
         }
 
-        stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480, frameRate: 30 } });
+        if (!landmarker.current || !faceLandmarker.current) {
+          throw new Error("Initialization failed: Hand/Face models could not be loaded. Please try again later.");
+        }
+
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480, frameRate: 30 } });
+        } catch (mediaErr) {
+          throw new Error("Camera Access Denied: Please enable camera permissions to use gestures.");
+        }
+
         if (videoRef.current) videoRef.current.srcObject = stream;
         setIsLoading(false);
+        setError(null);
 
         const loop = () => {
           if (!isActive || !videoRef.current || videoRef.current.readyState < 2) { 
@@ -215,7 +231,7 @@ export default function GestureController() {
           
           const hLm = handResults?.landmarks?.[0];
           const fLm = faceResults?.faceLandmarks?.[0];
-          if (canvasRef.current) drawSkeletons(hLm, fLm, canvasRef.current, videoRef.current);
+          if (canvasRef.current) drawSkeletons(handResults, fLm, canvasRef.current, videoRef.current);
 
           // Only process gestures if onboarding is dismissed
           if (isGesturing) {
@@ -291,7 +307,10 @@ export default function GestureController() {
           animationId = requestAnimationFrame(loop);
         };
         loop();
-      } catch (e) { setError(e.message); setActive(false); setIsLoading(false); }
+      } catch (e) { 
+        setError(e.message || "Currently facing some issue. Try after some time."); 
+        setIsLoading(false); 
+      }
     };
     start();
     return () => { isActive = false; cancelAnimationFrame(animationId); stream?.getTracks().forEach(t => t.stop()); };
@@ -335,6 +354,20 @@ export default function GestureController() {
                 <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center gap-2">
                   <div className="w-4 h-4 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
                   <span className="text-[8px] font-bold text-white uppercase tracking-widest animate-pulse">Initializing...</span>
+                </div>
+              )}
+              {error && (
+                <div className="absolute inset-0 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center p-4 text-center">
+                  <span className="text-xl mb-2">⚠️</span>
+                  <span className="text-[9px] font-bold text-red-400 uppercase tracking-widest leading-relaxed">
+                    {error}
+                  </span>
+                  <button 
+                    onClick={() => { setError(null); start(); }}
+                    className="mt-3 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-[8px] uppercase tracking-tighter font-bold transition-colors"
+                  >
+                    Retry Connection
+                  </button>
                 </div>
               )}
             </motion.div>

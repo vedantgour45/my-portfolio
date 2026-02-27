@@ -25,8 +25,6 @@ export default function HeroSection() {
     >
       <HeroScene />
 
-
-
       <motion.div
         style={{ y: y1, opacity }}
         className="z-10 text-center px-6"

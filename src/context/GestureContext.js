@@ -20,7 +20,12 @@ export function GestureProvider({ children }) {
   const [shuffleTrigger, setShuffleTrigger] = useState(0);
 
   return (
-    <GestureContext.Provider value={{ gestureActive, setGestureActive, active, setActive, headRotation, setHeadRotation, shuffleTrigger, setShuffleTrigger }}>
+    <GestureContext.Provider value={{ 
+      gestureActive, setGestureActive, 
+      active, setActive, 
+      headRotation, setHeadRotation, 
+      shuffleTrigger, setShuffleTrigger
+    }}>
       {children}
     </GestureContext.Provider>
   );

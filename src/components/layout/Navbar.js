@@ -2,10 +2,14 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { navLinks, personalInfo } from "@/lib/data";
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const isProjectPage = pathname?.startsWith("/project/");
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
@@ -15,22 +19,31 @@ export default function Navbar() {
     const onScroll = () => {
       setScrolled(window.scrollY > 50);
 
-      // Detect active section
-      const sections = navLinks.map((l) => l.href.replace("#", ""));
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i]);
-        if (el && el.getBoundingClientRect().top <= 200) {
-          setActiveSection(sections[i]);
-          break;
+      if (!isProjectPage) {
+        // Detect active section
+        const sections = navLinks.map((l) => l.href.replace("#", ""));
+        for (let i = sections.length - 1; i >= 0; i--) {
+          const el = document.getElementById(sections[i]);
+          if (el && el.getBoundingClientRect().top <= 200) {
+            setActiveSection(sections[i]);
+            break;
+          }
         }
       }
     };
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [isProjectPage]);
 
   const scrollToSection = useCallback((e, href) => {
     e.preventDefault();
+    
+    // If we are on a project page and clicking a hash link, go back to home
+    if (isProjectPage) {
+      window.location.href = `/${href}`;
+      return;
+    }
+
     const id = href.replace("#", "");
     const el = document.getElementById(id);
     if (!el) return;
@@ -61,7 +74,7 @@ export default function Navbar() {
     };
 
     requestAnimationFrame(step);
-  }, []);
+  }, [isProjectPage]);
 
   const toggleTheme = () => {
     const newIsDark = !isDark;
@@ -88,24 +101,43 @@ export default function Navbar() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          {/* Logo */}
-          <a
-            href="#home"
-            onClick={(e) => scrollToSection(e, "#home")}
-            className="flex items-center gap-3 group"
-          >
-            <Image
-              src={personalInfo.logo}
-              alt="Logo"
-              width={36}
-              height={36}
-              className="group-hover:rotate-12 transition-transform duration-300"
-              style={{ width: "36px", height: "36px" }}
-            />
-            <span className="text-xs font-bold tracking-[0.3em] uppercase opacity-60 group-hover:opacity-100 transition-opacity hidden sm:inline">
-              V.GOUR
-            </span>
-          </a>
+          {/* Logo Area */}
+          <div className="flex flex-col items-start gap-1">
+            <a
+              href="/"
+              onClick={(e) => scrollToSection(e, "#home")}
+              className="flex items-center gap-3 group"
+            >
+              <Image
+                src={personalInfo.logo}
+                alt="Logo"
+                width={36}
+                height={36}
+                className="group-hover:rotate-12 transition-transform duration-300"
+                style={{ width: "36px", height: "36px" }}
+              />
+              <span className="text-xs font-bold tracking-[0.3em] uppercase opacity-60 group-hover:opacity-100 transition-opacity hidden sm:inline">
+                V.GOUR
+              </span>
+            </a>
+            
+            {/* Dynamic Back Link */}
+            {isProjectPage && (
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="pl-12" // Align with text
+              >
+                <Link 
+                  href="/#projects"
+                  className="text-[8px] font-black tracking-[0.4em] text-indigo-400 hover:text-white transition-colors uppercase flex items-center gap-2"
+                >
+                  <span className="w-4 h-[1px] bg-indigo-500" />
+                  BACK TO PROJECTS
+                </Link>
+              </motion.div>
+            )}
+          </div>
 
           {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-1">
