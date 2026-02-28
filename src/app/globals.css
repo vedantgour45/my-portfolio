@@ -72,12 +72,14 @@ body {
    LIGHT MODE
    ═══════════════════════════════════════════════════ */
 .light body {
-  background: #fafafa;
+  /* Full-page cinematic gradient — mirrors dark mode structure */
+  background: radial-gradient(ellipse at 50% -10%, #dde1f5 0%, #ede9f8 30%, #f5f5fb 65%, #ffffff 100%) no-repeat fixed;
   color: #111;
 }
 
 .light .hero-bg {
-  background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 50%, #e8eaf6 100%);
+  /* Transparent — let the body gradient show through */
+  background: transparent;
 }
 
 .light .hero-title {
@@ -97,9 +99,14 @@ body {
 }
 
 .light .navbar-scrolled {
-  background: rgba(250, 250, 250, 0.7);
+  background: rgba(245, 245, 251, 0.75);
   backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+}
+
+/* Non-scrolled light navbar — transparent */
+.light nav:not(.navbar-scrolled) {
+  background: transparent;
 }
 
 .light nav a,
@@ -112,9 +119,10 @@ body {
 }
 
 .light .glass {
-  background: rgba(0, 0, 0, 0.03);
-  border-color: rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(99, 102, 241, 0.1);
   backdrop-filter: blur(20px);
+  box-shadow: 0 2px 12px 0 rgba(99, 102, 241, 0.06);
 }
 
 .light section {
@@ -131,19 +139,26 @@ body {
 }
 
 .light section .text-gray-400 {
-  color: #666;
+  color: #444;
 }
 
 .light section .text-gray-500 {
-  color: #888;
-}
-
-.light section .text-gray-300 {
   color: #555;
 }
 
-.light section .text-white {
+.light section .text-gray-300 {
+  color: #666;
+}
+
+/* Prevent text-white override inside active buttons and project cards in light mode */
+.light section .text-white:not(button *):not(.group *) {
   color: #111;
+}
+
+/* Active skill/section buttons in light mode keep white text */
+.light button.bg-orange-500,
+.light button.bg-orange-500 * {
+  color: white !important;
 }
 
 /* Light mode form inputs */
@@ -181,17 +196,29 @@ body {
 
 /* Light mode 3D scene overlay */
 .light canvas {
-  opacity: 0.3;
+  opacity: 0.7;
 }
 
-/* Light mode project cards */
-.light .group {
-  background: rgba(0, 0, 0, 0.02);
-  border-color: rgba(0, 0, 0, 0.08);
+/* Suppress heavy dark shadows on buttons/cards in light mode */
+.light [class*="shadow"] {
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.06) !important;
 }
 
-.light .group:hover {
-  border-color: rgba(99, 102, 241, 0.3);
+/* Keep the orange glow on active tabs subtle */
+.light .shadow-\[0_10px_30px_rgba\(249\,115\,22\,0\.12\)\] {
+  box-shadow: 0 4px 16px 0 rgba(249, 115, 22, 0.15) !important;
+}
+
+/* Light mode cards — only non-button group divs */
+.light section div.group {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(99, 102, 241, 0.08);
+  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.04);
+}
+
+.light section div.group:hover {
+  border-color: rgba(249, 115, 22, 0.2);
+  box-shadow: 0 4px 16px 0 rgba(99, 102, 241, 0.06);
 }
 
 /* Light mode skill bars */

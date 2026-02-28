@@ -15,6 +15,15 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
   const [isDark, setIsDark] = useState(true);
 
+  // Restore theme from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("theme");
+    const prefersDark = saved ? saved === "dark" : true;
+    setIsDark(prefersDark);
+    document.documentElement.classList.add(prefersDark ? "dark" : "light");
+    document.documentElement.classList.remove(prefersDark ? "light" : "dark");
+  }, []);
+
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 50);
@@ -82,6 +91,8 @@ export default function Navbar() {
   const toggleTheme = () => {
     const newIsDark = !isDark;
     setIsDark(newIsDark);
+    // Persist to localStorage
+    localStorage.setItem("theme", newIsDark ? "dark" : "light");
     if (newIsDark) {
       document.documentElement.classList.add("dark");
       document.documentElement.classList.remove("light");
@@ -110,34 +121,19 @@ export default function Navbar() {
               className="flex items-center gap-3 group"
             >
               <Image
-                src={personalInfo.logo}
+                src={isDark ? personalInfo.logo : "/assets/main-logo2.png"}
                 alt="Logo"
                 width={36}
                 height={36}
                 className="group-hover:rotate-12 transition-transform duration-300"
                 style={{ width: "36px", height: "36px" }}
               />
-              <span className="text-xs font-bold tracking-[0.3em] uppercase opacity-70 group-hover:opacity-100 transition-opacity hidden sm:inline text-white">
+              <span
+                className={`text-xs font-bold tracking-[0.3em] uppercase opacity-70 group-hover:opacity-100 transition-opacity hidden sm:inline ${isDark ? "text-white" : "text-gray-900"}`}
+              >
                 <span className="text-orange-500">V.</span>GOUR
               </span>
             </a>
-
-            {/* Dynamic Back Link */}
-            {isProjectPage && (
-              <motion.div
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="pl-12" // Align with text
-              >
-                <Link
-                  href="/#projects"
-                  className="text-[8px] font-black tracking-[0.4em] text-orange-500 hover:text-white transition-colors uppercase flex items-center gap-2"
-                >
-                  <span className="w-4 h-[1px] bg-orange-500" />
-                  BACK TO PROJECTS
-                </Link>
-              </motion.div>
-            )}
           </div>
 
           {/* Desktop Links */}

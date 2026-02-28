@@ -18,14 +18,23 @@ export function GestureProvider({ children }) {
   const [active, setActive] = useState(false);
   const [headRotation, setHeadRotation] = useState({ yaw: 0, pitch: 0 });
   const [shuffleTrigger, setShuffleTrigger] = useState(0);
+  const [cursorPos, setCursorPos] = useState({ x: 0.5, y: 0.5 });
 
   return (
-    <GestureContext.Provider value={{ 
-      gestureActive, setGestureActive, 
-      active, setActive, 
-      headRotation, setHeadRotation, 
-      shuffleTrigger, setShuffleTrigger
-    }}>
+    <GestureContext.Provider
+      value={{
+        gestureActive,
+        setGestureActive,
+        active,
+        setActive,
+        headRotation,
+        setHeadRotation,
+        shuffleTrigger,
+        setShuffleTrigger,
+        cursorPos,
+        setCursorPos,
+      }}
+    >
       {children}
     </GestureContext.Provider>
   );
