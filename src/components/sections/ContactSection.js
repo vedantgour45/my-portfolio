@@ -40,13 +40,13 @@ export default function ContactSection() {
     <section
       id="contact"
       ref={sectionRef}
-      className="py-20 relative overflow-hidden"
+      className="py-16 relative overflow-hidden"
     >
       <div className="absolute inset-0 bg-gradient-to-t from-orange-500/[0.03] to-transparent" />
 
       <div className="max-w-7xl mx-auto px-6 relative">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-10">
           <span className="text-[10px] uppercase tracking-[0.5em] text-orange-500 font-bold">
             CONTACT
           </span>

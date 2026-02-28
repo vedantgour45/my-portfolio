@@ -35,46 +35,49 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [isProjectPage]);
 
-  const scrollToSection = useCallback((e, href) => {
-    e.preventDefault();
-    
-    // If we are on a project page and clicking a hash link, go back to home
-    if (isProjectPage) {
-      window.location.href = `/${href}`;
-      return;
-    }
+  const scrollToSection = useCallback(
+    (e, href) => {
+      e.preventDefault();
 
-    const id = href.replace("#", "");
-    const el = document.getElementById(id);
-    if (!el) return;
-
-    setMobileOpen(false);
-
-    // Smooth scroll with easing
-    const targetY = el.getBoundingClientRect().top + window.scrollY - 80;
-    const startY = window.scrollY;
-    const diff = targetY - startY;
-    const duration = Math.min(1200, Math.max(600, Math.abs(diff) * 0.5));
-    let startTime = null;
-
-    const easeInOutCubic = (t) =>
-      t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
-    const step = (timestamp) => {
-      if (!startTime) startTime = timestamp;
-      const elapsed = timestamp - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const easedProgress = easeInOutCubic(progress);
-
-      window.scrollTo(0, startY + diff * easedProgress);
-
-      if (progress < 1) {
-        requestAnimationFrame(step);
+      // If we are on a project page and clicking a hash link, go back to home
+      if (isProjectPage) {
+        window.location.href = `/${href}`;
+        return;
       }
-    };
 
-    requestAnimationFrame(step);
-  }, [isProjectPage]);
+      const id = href.replace("#", "");
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      setMobileOpen(false);
+
+      // Smooth scroll with easing
+      const targetY = el.getBoundingClientRect().top + window.scrollY - 50;
+      const startY = window.scrollY;
+      const diff = targetY - startY;
+      const duration = Math.min(1200, Math.max(600, Math.abs(diff) * 0.5));
+      let startTime = null;
+
+      const easeInOutCubic = (t) =>
+        t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+      const step = (timestamp) => {
+        if (!startTime) startTime = timestamp;
+        const elapsed = timestamp - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easedProgress = easeInOutCubic(progress);
+
+        window.scrollTo(0, startY + diff * easedProgress);
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        }
+      };
+
+      requestAnimationFrame(step);
+    },
+    [isProjectPage],
+  );
 
   const toggleTheme = () => {
     const newIsDark = !isDark;
@@ -95,9 +98,7 @@ export default function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${
-          scrolled
-            ? "py-3 navbar-scrolled"
-            : "py-6 bg-transparent"
+          scrolled ? "py-3 navbar-scrolled" : "py-6 bg-transparent"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
@@ -120,7 +121,7 @@ export default function Navbar() {
                 <span className="text-orange-500">V.</span>GOUR
               </span>
             </a>
-            
+
             {/* Dynamic Back Link */}
             {isProjectPage && (
               <motion.div
@@ -128,7 +129,7 @@ export default function Navbar() {
                 animate={{ opacity: 1, x: 0 }}
                 className="pl-12" // Align with text
               >
-                <Link 
+                <Link
                   href="/#projects"
                   className="text-[8px] font-black tracking-[0.4em] text-orange-500 hover:text-white transition-colors uppercase flex items-center gap-2"
                 >
@@ -186,9 +187,15 @@ export default function Navbar() {
             className="md:hidden flex flex-col gap-1.5 p-2 bg-transparent shadow-none"
             aria-label="Menu"
           >
-            <span className={`w-6 h-[2px] bg-current transition-all ${mobileOpen ? "rotate-45 translate-y-[5px]" : ""}`} />
-            <span className={`w-6 h-[2px] bg-current transition-all ${mobileOpen ? "opacity-0" : ""}`} />
-            <span className={`w-6 h-[2px] bg-current transition-all ${mobileOpen ? "-rotate-45 -translate-y-[5px]" : ""}`} />
+            <span
+              className={`w-6 h-[2px] bg-current transition-all ${mobileOpen ? "rotate-45 translate-y-[5px]" : ""}`}
+            />
+            <span
+              className={`w-6 h-[2px] bg-current transition-all ${mobileOpen ? "opacity-0" : ""}`}
+            />
+            <span
+              className={`w-6 h-[2px] bg-current transition-all ${mobileOpen ? "-rotate-45 -translate-y-[5px]" : ""}`}
+            />
           </button>
         </div>
       </motion.nav>

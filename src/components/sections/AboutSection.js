@@ -66,11 +66,11 @@ export default function AboutSection() {
     <section
       id="about"
       ref={sectionRef}
-      className="py-20 relative overflow-hidden"
+      className="py-16 relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-10">
           <span className="text-[10px] uppercase tracking-[0.5em] text-orange-500 font-bold">
             PROFILE
           </span>

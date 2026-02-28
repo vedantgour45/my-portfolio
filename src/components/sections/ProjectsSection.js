@@ -63,7 +63,7 @@ function ProjectCard({ project, index }) {
 
 export default function ProjectsSection() {
   return (
-    <section id="projects" className="py-20 relative overflow-hidden">
+    <section id="projects" className="py-16 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <motion.div
@@ -71,7 +71,7 @@ export default function ProjectsSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-10"
         >
           <span className="text-[10px] uppercase tracking-[0.5em] text-orange-500 font-bold">
             PORTFOLIO

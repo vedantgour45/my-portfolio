@@ -52,12 +52,6 @@ const INSTRUCTIONS = [
     desc: "Pinch and drag up/down to move the page",
     color: "text-indigo-400",
   },
-  {
-    icon: "👋",
-    action: "Wave/Shuffle",
-    desc: "Wave hand fast left-right to shuffle skills elements",
-    color: "text-indigo-400",
-  },
 ];
 
 // ── Config ──
@@ -78,13 +72,8 @@ export default function GestureController() {
   const instructionsShown = useRef(false);
   const landmarker = useRef(null);
   const faceLandmarker = useRef(null);
-  const {
-    setGestureActive,
-    setHeadRotation,
-    setShuffleTrigger,
-    active,
-    setActive,
-  } = useGestureContext();
+  const { setGestureActive, setHeadRotation, active, setActive } =
+    useGestureContext();
 
   const smoothX = useRef(0);
   const smoothY = useRef(0);
@@ -99,7 +88,6 @@ export default function GestureController() {
   const gestureState = useRef("none");
   const cursorAnimId = useRef(null);
 
-  const lastSwipeTime = useRef(0);
   const previousX = useRef(null);
   const previousTime = useRef(0);
   const streamRef = useRef(null);
@@ -375,27 +363,6 @@ export default function GestureController() {
               const normalizedY = hLm[8].y;
               const dist = Math.hypot(hLm[4].x - hLm[8].x, hLm[4].y - hLm[8].y);
               const isCurrentlyPinching = dist < PINCH_THRESHOLD;
-
-              if (!isCurrentlyPinching) {
-                if (previousX.current !== null) {
-                  const dt = now - previousTime.current;
-                  const dx = normalizedX - previousX.current;
-                  if (dt > 0) {
-                    const speed = dx / dt;
-                    if (
-                      Math.abs(speed) > 0.0035 &&
-                      now - lastSwipeTime.current > 1500
-                    ) {
-                      setShuffleTrigger((prev) => prev + 1);
-                      lastSwipeTime.current = now;
-                    }
-                  }
-                }
-                previousX.current = normalizedX;
-                previousTime.current = now;
-              } else {
-                previousX.current = null;
-              }
 
               if (!isCurrentlyPinching && !isPinched.current) {
                 targetX.current =
