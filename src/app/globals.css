@@ -2,36 +2,362 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@layer base {
 
-html {
-  scroll-behavior: smooth;
-  font-family: 'Poppins', sans-serif;
+  /* Default: Dark Mode */
+  /* Default: Dark Mode */
+  body {
+    @apply text-white antialiased;
+    background: radial-gradient(circle at 50% -20%, #1e1b4b 0%, #000 70%) no-repeat fixed;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+  }
 }
 
-@layer base {
-  body {
-    @apply bg-[#FAF9F6] text-[#1f2937] tracking-wide
+@layer components {
+
+  /* ─── Glassmorphism ──────────────────────────── */
+  .glass {
+    @apply backdrop-blur-2xl bg-white/[0.02] border border-white/[0.05];
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-bold
+  /* ─── Gradient Text ──────────────────────────── */
+  .text-gradient {
+    @apply bg-gradient-to-r from-orange-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent;
   }
 
-  h1 {
-    @apply text-4xl sm:text-5xl md:text-6xl
+  .text-highlight {
+    @apply text-orange-500 font-bold;
   }
 
-  h2 {
-    @apply text-3xl sm:text-4xl
+  .font-cursive {
+    font-family: var(--font-dancing-script), cursive;
   }
+}
 
-  li {
-    @apply cursor-pointer
-  }
+/* ═══════════════════════════════════════════════════
+   DARK MODE (default)
+   ═══════════════════════════════════════════════════ */
+.dark body,
+body {
+  background: radial-gradient(circle at 50% -20%, #2e1065 0%, #000 80%) no-repeat fixed;
+  color: #fff;
+}
 
-  button {
-    @apply shadow-xl shadow-gray-400 rounded-xl uppercase bg-gradient-to-r from-[#a98b52] to-[#9d794e] font-bold text-[#fffff9]
-  }
+.hero-bg {
+  background: transparent;
+  /* Body handles the gradient */
+}
 
+.hero-title {
+  color: #fff;
+  letter-spacing: -0.04em;
+}
+
+.hero-subtitle {
+  color: #94a3b8;
+}
+
+.hero-btn {
+  color: #fff;
+}
+
+.hud-text {
+  color: #475569;
+}
+
+.navbar-scrolled {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(40px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* ═══════════════════════════════════════════════════
+   LIGHT MODE
+   ═══════════════════════════════════════════════════ */
+.light body {
+  /* Full-page cinematic gradient — mirrors dark mode structure */
+  background: radial-gradient(ellipse at 50% -10%, #dde1f5 0%, #ede9f8 30%, #f5f5fb 65%, #ffffff 100%) no-repeat fixed;
+  color: #111;
+}
+
+.light .hero-bg {
+  /* Transparent — let the body gradient show through */
+  background: transparent;
+}
+
+.light .hero-title {
+  color: #111;
+}
+
+.light .hero-subtitle {
+  color: #555;
+}
+
+.light .hero-btn {
+  color: #111;
+}
+
+.light .hud-text {
+  color: #999;
+}
+
+.light .navbar-scrolled {
+  background: rgba(245, 245, 251, 0.75);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+}
+
+/* Non-scrolled light navbar — transparent */
+.light nav:not(.navbar-scrolled) {
+  background: transparent;
+}
+
+.light nav a,
+.light nav span {
+  color: #333;
+}
+
+.light nav a:hover {
+  color: #111;
+}
+
+.light .glass {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(99, 102, 241, 0.1);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 2px 12px 0 rgba(99, 102, 241, 0.06);
+}
+
+.light section {
+  color: #111;
+}
+
+.light section h2,
+.light section h3 {
+  color: #111;
+}
+
+.light section p {
+  color: #555;
+}
+
+.light section .text-gray-400 {
+  color: #444;
+}
+
+.light section .text-gray-500 {
+  color: #555;
+}
+
+.light section .text-gray-300 {
+  color: #666;
+}
+
+/* Prevent text-white override inside active buttons and project cards in light mode */
+.light section .text-white:not(button *):not(.group *) {
+  color: #111;
+}
+
+/* Active skill/section buttons in light mode keep white text */
+.light button.bg-orange-500,
+.light button.bg-orange-500 * {
+  color: white !important;
+}
+
+/* Light mode form inputs */
+.light input,
+.light textarea {
+  background: rgba(0, 0, 0, 0.03) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  color: #111 !important;
+}
+
+.light input::placeholder,
+.light textarea::placeholder {
+  color: #aaa !important;
+}
+
+/* Light mode buttons */
+.light .bg-indigo-500 {
+  background: #4f46e5;
+  color: white !important;
+}
+
+/* Light mode footer */
+.light footer {
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #888;
+}
+
+.light footer a {
+  color: #888;
+}
+
+.light footer a:hover {
+  color: #4f46e5;
+}
+
+/* Light mode 3D scene overlay */
+.light canvas {
+  opacity: 0.7;
+}
+
+/* Suppress heavy dark shadows on buttons/cards in light mode */
+.light [class*="shadow"] {
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Keep the orange glow on active tabs subtle */
+.light .shadow-\[0_10px_30px_rgba\(249\,115\,22\,0\.12\)\] {
+  box-shadow: 0 4px 16px 0 rgba(249, 115, 22, 0.15) !important;
+}
+
+/* Light mode cards — only non-button group divs */
+.light section div.group {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(99, 102, 241, 0.08);
+  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.04);
+}
+
+.light section div.group:hover {
+  border-color: rgba(249, 115, 22, 0.2);
+  box-shadow: 0 4px 16px 0 rgba(99, 102, 241, 0.06);
+}
+
+/* Light mode skill bars */
+.light .bg-white\/5 {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* ═══════════════════════════════════════════════════
+   GLOBAL UTILITIES
+   ═══════════════════════════════════════════════════ */
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+/* Canvas optimization */
+canvas {
+  touch-action: none;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(99, 102, 241, 0.3);
+  color: inherit;
+}
+
+/* Scrollbar – dark */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.5);
+}
+
+/* Scrollbar – light */
+.light ::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.2);
+}
+
+.light ::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.4);
+}
+
+/* Smooth theme transition */
+body,
+section,
+nav,
+.glass,
+input,
+textarea,
+footer,
+canvas {
+  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, opacity 0.5s ease;
+}
+
+/* ═══════════════════════════════════════════════════
+   GESTURE CURSOR
+   Uses transform for GPU acceleration. Updated via
+   direct DOM manipulation (not React state) for 60fps.
+   ═══════════════════════════════════════════════════ */
+.gesture-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  pointer-events: none;
+  will-change: transform, opacity;
+  transition: opacity 0.3s ease;
+}
+
+.gesture-cursor-ring {
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(99, 102, 241, 0.6);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.15), inset 0 0 8px rgba(99, 102, 241, 0.08);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, width 0.15s ease, height 0.15s ease;
+}
+
+.gesture-cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: #818cf8;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 6px rgba(99, 102, 241, 0.5);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gesture-cursor-label {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #818cf8;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+/* Click flash animation */
+.gesture-click-flash .gesture-cursor-ring {
+  width: 55px;
+  height: 55px;
+  border-color: rgba(129, 230, 160, 0.8);
+  box-shadow: 0 0 30px rgba(74, 222, 128, 0.4), inset 0 0 15px rgba(74, 222, 128, 0.15);
+}
+
+.gesture-click-flash .gesture-cursor-dot {
+  background: #4ade80;
+  box-shadow: 0 0 12px rgba(74, 222, 128, 0.7);
 }
