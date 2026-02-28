@@ -368,7 +368,7 @@ export default function GestureController() {
         }
 
         try {
-          streamRef.current = await navigator.mediaDevices.getUserMedia({
+          const stream = await navigator.mediaDevices.getUserMedia({
             video: {
               width: { ideal: 640 },
               height: { ideal: 480 },
@@ -376,6 +376,13 @@ export default function GestureController() {
               facingMode: facingMode,
             },
           });
+
+          if (!isActive) {
+            stream.getTracks().forEach((t) => t.stop());
+            return;
+          }
+
+          streamRef.current = stream;
         } catch (mediaErr) {
           throw new Error(
             "Camera Access Denied: Please enable camera permissions to use gestures.",
