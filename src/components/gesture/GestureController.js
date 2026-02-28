@@ -325,8 +325,9 @@ export default function GestureController() {
       instructionsShown.current = true;
     }
 
-    let animationId,
-      isActive = true;
+    let animationId;
+    let isActive = true;
+    const videoElement = videoRef.current;
 
     const start = async () => {
       setIsLoading(true);
@@ -496,9 +497,16 @@ export default function GestureController() {
       // if the toggle happened before the async getUserMedia call resolved.
       streamRef.current?.getTracks().forEach((t) => t.stop());
       streamRef.current = null;
-      if (videoRef.current) videoRef.current.srcObject = null;
+      if (videoElement) videoElement.srcObject = null;
     };
-  }, [active, doClick, drawSkeletons, setHeadRotation]);
+  }, [
+    active,
+    doClick,
+    drawSkeletons,
+    setHeadRotation,
+    isGesturing,
+    setCursorPos,
+  ]);
 
   return (
     <>

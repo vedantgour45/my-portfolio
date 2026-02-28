@@ -118,7 +118,7 @@ export default function ProjectDetailsPage({ params }) {
                 <p
                   className={`text-lg md:text-xl font-light italic tracking-wide opacity-70 ${isLight ? "text-gray-700" : "text-gray-300"}`}
                 >
-                  "{project.subtitle}"
+                  &quot;{project.subtitle}&quot;
                 </p>
               </div>
 
