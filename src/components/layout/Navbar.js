@@ -116,8 +116,8 @@ export default function Navbar() {
                 className="group-hover:rotate-12 transition-transform duration-300"
                 style={{ width: "36px", height: "36px" }}
               />
-              <span className="text-xs font-bold tracking-[0.3em] uppercase opacity-60 group-hover:opacity-100 transition-opacity hidden sm:inline">
-                V.GOUR
+              <span className="text-xs font-bold tracking-[0.3em] uppercase opacity-70 group-hover:opacity-100 transition-opacity hidden sm:inline text-white">
+                <span className="text-orange-500">V.</span>GOUR
               </span>
             </a>
             
@@ -130,9 +130,9 @@ export default function Navbar() {
               >
                 <Link 
                   href="/#projects"
-                  className="text-[8px] font-black tracking-[0.4em] text-indigo-400 hover:text-white transition-colors uppercase flex items-center gap-2"
+                  className="text-[8px] font-black tracking-[0.4em] text-orange-500 hover:text-white transition-colors uppercase flex items-center gap-2"
                 >
-                  <span className="w-4 h-[1px] bg-indigo-500" />
+                  <span className="w-4 h-[1px] bg-orange-500" />
                   BACK TO PROJECTS
                 </Link>
               </motion.div>
@@ -154,7 +154,7 @@ export default function Navbar() {
                 >
                   <span className="relative z-10">{link.name}</span>
                   <span
-                    className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-300 ${
+                    className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] bg-gradient-to-r from-orange-500 to-purple-500 transition-all duration-300 ${
                       isActive ? "w-3/4" : "w-0 group-hover:w-3/4"
                     }`}
                   />

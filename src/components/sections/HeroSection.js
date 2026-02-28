@@ -39,11 +39,11 @@ export default function HeroSection() {
         </motion.p>
 
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-2 tracking-tighter hero-title">
-          Hello, I am <span className="text-gradient">Vedant Gour</span>
+          Hello, I am <span className="text-white">Vedant Gour</span>
         </h1>
         
-        <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 tracking-tighter text-white/90">
-          I&apos;m a Front End Developer.
+        <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 tracking-tighter">
+          <span className="text-white">Professional</span> <span className="text-orange-500">Frontend Developer.</span>
         </h2>
 
         <motion.p
@@ -70,7 +70,7 @@ export default function HeroSection() {
           <a
             href="/assets/resume.pdf"
             target="_blank"
-            className="px-10 py-4 border-2 border-indigo-500/30 text-[10px] tracking-[0.2em] font-bold rounded-full hover:bg-indigo-500/10 transition-colors uppercase bg-transparent shadow-none hero-btn"
+            className="px-10 py-4 border-2 border-orange-500/30 text-[10px] tracking-[0.2em] font-bold rounded-full hover:bg-orange-500/10 transition-colors uppercase bg-transparent shadow-none hero-btn"
           >
             Resume
           </a>
@@ -79,7 +79,7 @@ export default function HeroSection() {
 
       {/* Scroll indicator */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-20">
-        <div className="w-[1px] h-16 bg-gradient-to-b from-indigo-500/0 via-indigo-500 to-indigo-500/0 animate-pulse" />
+        <div className="w-[1px] h-16 bg-gradient-to-b from-orange-500/0 via-orange-500 to-orange-500/0 animate-pulse" />
         <span className="text-[9px] uppercase tracking-[0.4em] text-gray-500">
           Scroll Down
         </span>

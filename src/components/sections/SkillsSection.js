@@ -15,20 +15,22 @@ function SkillCard({ name, delay, Icon }) {
       layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ 
-        delay: delay * 0.05, 
+      transition={{
+        delay: delay * 0.05,
         duration: 0.4,
         ease: "easeOut",
-        layout: { type: "spring", bounce: 0.2, duration: 0.6 }
+        layout: { type: "spring", bounce: 0.2, duration: 0.6 },
       }}
-      whileHover={{ 
+      whileHover={{
         scale: 1.05,
-        backgroundColor: "rgba(99, 102, 241, 0.1)", // indigo-500/10
-        borderColor: "rgba(99, 102, 241, 0.3)"      // indigo-500/30
+        backgroundColor: "rgba(249, 115, 22, 0.05)", // orange-500/5
+        borderColor: "rgba(249, 115, 22, 0.2)", // orange-500/20
       }}
       className="glass rounded-2xl p-6 border border-white/5 flex flex-col items-center justify-center gap-4 text-center cursor-default transition-colors duration-300 group"
     >
-      {Icon && <Icon className="w-8 h-8 text-indigo-400 group-hover:text-indigo-300 transition-colors drop-shadow-[0_0_8px_rgba(129,140,248,0.5)]" />}
+      {Icon && (
+        <Icon className="w-8 h-8 text-orange-500 group-hover:text-orange-400 transition-colors drop-shadow-[0_0_8px_rgba(249,115,22,0.5)]" />
+      )}
       <span className="text-gray-300 font-bold tracking-wider group-hover:text-white transition-colors">
         {name}
       </span>
@@ -49,40 +51,42 @@ export default function SkillsSection() {
   // Shuffle when trigger updates
   useEffect(() => {
     if (shuffleTrigger > 0) {
-      setCurrentSkills(prev => [...prev].sort(() => Math.random() - 0.5));
+      setCurrentSkills((prev) => [...prev].sort(() => Math.random() - 0.5));
     }
   }, [shuffleTrigger]);
 
   return (
-    <section id="skills" className="py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-500/[0.02] to-transparent" />
+    <section id="skills" className="py-20 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-orange-500/[0.02] to-transparent" />
 
       <div className="max-w-7xl mx-auto px-6 relative">
         {/* Header */}
-        <div className="text-center mb-16">
-          <span className="text-[10px] uppercase tracking-[0.5em] text-indigo-400 font-bold">
+        <div className="text-center mb-12">
+          <span className="text-[10px] uppercase tracking-[0.5em] text-orange-500 font-bold">
             SKILLS
           </span>
           <h2 className="text-5xl md:text-7xl font-black mt-4 tracking-tighter">
             SKILL<span className="text-gradient">.</span>SET
           </h2>
           {gestureActive && (
-            <div className="mt-4 flex items-center justify-center gap-2 text-indigo-400/80 animate-pulse">
+            <div className="mt-4 flex items-center justify-center gap-2 text-orange-500/80 animate-pulse">
               <span className="text-xl">👋</span>
-              <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Wave fast horizontally to shuffle</span>
+              <span className="text-[10px] uppercase tracking-[0.2em] font-bold">
+                Wave fast horizontally to shuffle
+              </span>
             </div>
           )}
         </div>
 
         {/* Category Tabs */}
-        <div className="flex justify-center gap-3 mb-16 flex-wrap">
+        <div className="flex justify-center gap-3 mb-12 flex-wrap">
           {skillCategories.map((cat, i) => (
             <button
               key={cat.title}
               onClick={() => setActive(i)}
               className={`px-6 py-3 rounded-full text-[11px] uppercase tracking-[0.2em] font-bold transition-all duration-300 shadow-none ${
                 active === i
-                  ? "bg-indigo-500 text-white"
+                  ? "bg-orange-500 text-white"
                   : "glass text-gray-400 hover:text-white hover:bg-white/10"
               }`}
             >

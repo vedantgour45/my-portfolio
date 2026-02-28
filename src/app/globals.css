@@ -5,8 +5,10 @@
 @layer base {
 
   /* Default: Dark Mode */
+  /* Default: Dark Mode */
   body {
-    @apply bg-black text-white antialiased;
+    @apply text-white antialiased;
+    background: radial-gradient(circle at 50% -20%, #1e1b4b 0%, #000 70%) no-repeat fixed;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
   }
 }
@@ -15,12 +17,17 @@
 
   /* ─── Glassmorphism ──────────────────────────── */
   .glass {
-    @apply backdrop-blur-xl bg-white/5 border border-white/10;
+    @apply backdrop-blur-2xl bg-white/[0.02] border border-white/[0.05];
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
   }
 
   /* ─── Gradient Text ──────────────────────────── */
   .text-gradient {
-    @apply bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-orange-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent;
+  }
+
+  .text-highlight {
+    @apply text-orange-500 font-bold;
   }
 }
 
@@ -29,20 +36,22 @@
    ═══════════════════════════════════════════════════ */
 .dark body,
 body {
-  background: #000;
+  background: radial-gradient(circle at 50% -20%, #2e1065 0%, #000 80%) no-repeat fixed;
   color: #fff;
 }
 
 .hero-bg {
-  background: #000;
+  background: transparent;
+  /* Body handles the gradient */
 }
 
 .hero-title {
   color: #fff;
+  letter-spacing: -0.04em;
 }
 
 .hero-subtitle {
-  color: #d1d5db;
+  color: #94a3b8;
 }
 
 .hero-btn {
@@ -50,13 +59,13 @@ body {
 }
 
 .hud-text {
-  color: #555;
+  color: #475569;
 }
 
 .navbar-scrolled {
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(40px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 /* ═══════════════════════════════════════════════════

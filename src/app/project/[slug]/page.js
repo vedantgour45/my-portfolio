@@ -22,7 +22,7 @@ export default function ProjectDetailsPage({ params }) {
   }
 
   return (
-    <div className="bg-black text-white min-h-screen font-sans selection:bg-indigo-500/30">
+    <div className="bg-transparent text-white min-h-screen font-sans selection:bg-orange-500/30">
       <main className="relative min-h-screen">
         {/* Cinematic Blurred Background - Less Intense */}
         <div className="absolute inset-0 z-0 h-[40vh] overflow-hidden">
@@ -65,7 +65,7 @@ export default function ProjectDetailsPage({ params }) {
             >
               <div>
                 <h1 className="text-4xl md:text-6xl font-black mb-3 tracking-tighter leading-none text-white uppercase">
-                  {project.title}<span className="text-indigo-500">.</span>
+                  {project.title}<span className="text-orange-500">.</span>
                 </h1>
                 <p className="text-lg md:text-xl text-gray-400 font-light italic tracking-wide opacity-70">
                   "{project.subtitle}"
@@ -77,23 +77,23 @@ export default function ProjectDetailsPage({ params }) {
                 <a 
                   href={project.demo} 
                   target="_blank" 
-                  className="px-6 py-3 bg-white text-black rounded-full font-bold text-[9px] tracking-[0.2em] uppercase transition-all hover:bg-indigo-500 hover:text-white flex items-center gap-2"
+                  className="px-6 py-3 bg-white text-black rounded-full font-bold text-[9px] tracking-[0.2em] uppercase transition-all hover:bg-orange-500 hover:text-white flex items-center gap-2"
                 >
-                  <span className="text-base">▶</span> Launch
+                  <span className="text-base">▶</span> Launch Project
                 </a>
                 <a 
                   href={project.code} 
                   target="_blank" 
                   className="px-6 py-3 border border-white/10 rounded-full font-bold text-[9px] tracking-[0.2em] uppercase transition-all hover:bg-white/5 flex items-center gap-2"
                 >
-                  <span className="text-lg">⌨</span> Source
+                  <span className="text-lg">⌨</span> Source Code
                 </a>
               </div>
 
               {/* Tech Pills - Smaller */}
               <div className="flex flex-wrap gap-2 pt-2">
                  {project.tech.map(tech => (
-                   <span key={tech} className="text-[8px] font-bold tracking-[0.2em] text-indigo-400/70 border border-indigo-500/10 px-3 py-1.5 rounded-full bg-indigo-500/5 uppercase">
+                   <span key={tech} className="text-[8px] font-bold tracking-[0.2em] text-orange-500/70 border border-orange-500/10 px-3 py-1.5 rounded-full bg-orange-500/5 uppercase">
                      {tech}
                    </span>
                  ))}
@@ -111,11 +111,11 @@ export default function ProjectDetailsPage({ params }) {
               className="lg:col-span-5 space-y-8"
             >
               <div className="space-y-4">
-                <h3 className="text-[10px] uppercase tracking-[0.6em] text-indigo-400 font-bold flex items-center gap-3">
-                  <span className="w-8 h-[1px] bg-indigo-500" /> BUILD STRATEGY
+                <h3 className="text-[10px] uppercase tracking-[0.6em] text-orange-500 font-bold flex items-center gap-3">
+                  <span className="w-8 h-[1px] bg-orange-500" /> BUILD STRATEGY
                 </h3>
                 <p className="text-lg text-white font-light leading-relaxed">
-                  Focused on <span className="text-indigo-400 font-normal">performance</span> and intuitive UX.
+                  Focused on <span className="text-orange-500 font-normal">performance</span> and intuitive UX.
                 </p>
                 <p className="text-gray-400 text-base font-light leading-relaxed">
                   Detailed modular implementation ensures a smooth, high-fidelity experience optimized for all devices.
@@ -123,8 +123,8 @@ export default function ProjectDetailsPage({ params }) {
               </div>
 
               <div className="space-y-4 pt-8 border-t border-white/5">
-                <h3 className="text-[10px] uppercase tracking-[0.6em] text-gray-500 font-bold">Concept</h3>
-                <p className="text-base text-gray-400 leading-relaxed font-light">
+                <h3 className="text-[10px] uppercase tracking-[0.6em] text-gray-400 font-bold">Concept</h3>
+                <p className="text-base text-gray-400 leading-relaxed font-light italic">
                   {project.description}
                 </p>
               </div>
@@ -154,7 +154,7 @@ export default function ProjectDetailsPage({ params }) {
                   href="/#projects"
                   className="text-gray-500 hover:text-white text-[9px] uppercase tracking-[0.4em] transition-all flex flex-col items-center gap-4 group font-bold"
               >
-                  <div className="w-[1px] h-12 bg-gradient-to-b from-transparent to-indigo-500 group-hover:h-20 transition-all duration-500" />
+                  <div className="w-[1px] h-12 bg-gradient-to-b from-transparent to-orange-500 group-hover:h-20 transition-all duration-500" />
                   EXPLORE MORE
               </Link>
           </div>

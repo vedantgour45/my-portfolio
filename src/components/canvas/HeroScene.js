@@ -33,7 +33,7 @@ function ParticleCloud({ count = 2000 }) {
       </bufferGeometry>
       <pointsMaterial 
         size={0.1} 
-        color="#818cf8" 
+        color="#fb923c" 
         transparent 
         opacity={theme === "light" ? 0.3 : 0.6} 
         sizeAttenuation 
@@ -103,7 +103,7 @@ function InteractiveCore() {
     mainMesh.current.scale.setScalar(1 + Math.sin(t * 0.5) * 0.01);
   });
 
-  const mainColor = "#818cf8";
+  const mainColor = "#fb923c";
 
   return (
     <group>
@@ -189,12 +189,12 @@ export default function HeroScene() {
         
         {/* Key light that follows the head tracking perspective */}
         <pointLight 
-            position={[headRotation.yaw * 0.1, headRotation.pitch * 0.1, 10]} 
-            intensity={2} 
-            color="#818cf8" 
+          position={[headRotation.yaw * 0.1, headRotation.pitch * 0.1, 10]} 
+          intensity={2} 
+          color="#fb923c" 
         />
         
-        <pointLight position={[-10, -10, -10]} intensity={0.5} color="#6366f1" />
+        <pointLight position={[-10, -10, -10]} intensity={0.5} color="#f97316" />
 
         <Suspense fallback={null}>
           <ParticleCloud />

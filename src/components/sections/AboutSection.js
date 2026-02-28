@@ -66,12 +66,12 @@ export default function AboutSection() {
     <section
       id="about"
       ref={sectionRef}
-      className="py-32 relative overflow-hidden"
+      className="py-20 relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Header */}
-        <div className="text-center mb-20">
-          <span className="text-[10px] uppercase tracking-[0.5em] text-indigo-400 font-bold">
+        <div className="text-center mb-12">
+          <span className="text-[10px] uppercase tracking-[0.5em] text-orange-500 font-bold">
             PROFILE
           </span>
           <h2 className="text-5xl md:text-7xl font-black mt-4 tracking-tighter">
@@ -97,29 +97,32 @@ export default function AboutSection() {
               {/* Face tracking indicator */}
               {gestureActive && (
                 <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/50 backdrop-blur-md rounded-full px-2.5 py-1">
-                  <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
-                  <span className="text-[8px] text-green-400 font-bold uppercase tracking-wider">
-                    Face Tracking
+                  <span className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse" />
+                  <span className="text-[8px] text-orange-500 font-bold uppercase tracking-wider">
+                    Face Tracking Enabled
                   </span>
                 </div>
               )}
             </div>
             {/* Decorative elements */}
-            <div className="absolute -bottom-4 -right-4 w-full h-full border-2 border-indigo-500/20 rounded-3xl max-w-md mx-auto" />
-            <div className="absolute -top-4 -left-4 w-20 h-20 border border-indigo-500/30 rounded-2xl" />
+            <div className="absolute -bottom-4 -right-4 w-full h-full border-2 border-orange-500/20 rounded-3xl max-w-md mx-auto" />
+            <div className="absolute -top-4 -left-4 w-20 h-20 border border-orange-500/30 rounded-2xl" />
           </div>
 
           {/* Text */}
           <div ref={textRef} className="space-y-6">
-            <h3 className="text-3xl font-bold tracking-tight">
+            <h3 className="text-4xl font-black tracking-tight text-white uppercase">
               {personalInfo.name}
-              <span className="block text-lg text-indigo-400 font-medium mt-1">
+              <span className="block text-lg text-orange-500 font-medium mt-1 uppercase tracking-[0.2em] font-bold">
                 {personalInfo.role}
               </span>
             </h3>
 
             {personalInfo.about.map((p, i) => (
-              <p key={i} className="text-gray-400 leading-relaxed text-lg">
+              <p
+                key={i}
+                className="text-gray-400 leading-relaxed text-lg font-light"
+              >
                 {p}
               </p>
             ))}
@@ -128,7 +131,7 @@ export default function AboutSection() {
             <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/10">
               {personalInfo.stats.map((stat) => (
                 <div key={stat.label} className="text-center">
-                  <div className="text-3xl font-black text-gradient">
+                  <div className="text-3xl font-black text-white">
                     {stat.value}
                   </div>
                   <div className="text-[10px] uppercase tracking-[0.3em] text-gray-500 mt-2">
