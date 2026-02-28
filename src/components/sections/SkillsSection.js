@@ -101,16 +101,16 @@ function SkillCard({ name, delay, Icon }) {
       }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative group rounded-2xl h-32 w-[calc(50%-12px)] md:w-[calc(33.33%-16px)] lg:w-[calc(20%-20px)] xl:w-[calc(16.666%-20px)] flex-shrink-0"
+      className="relative group rounded-xl md:rounded-2xl h-24 md:h-32 w-[calc(33.33%-16px)] md:w-[calc(25%-18px)] lg:w-[calc(20%-20px)] xl:w-[calc(16.666%-20px)] flex-shrink-0"
     >
       <div
-        className="absolute inset-0 rounded-2xl bg-gradient-to-br from-orange-500/10 via-transparent to-indigo-500/5 backdrop-blur-xl border border-white/10 group-hover:border-orange-500/30 transition-colors duration-500"
+        className="absolute inset-0 rounded-xl md:rounded-2xl bg-gradient-to-br from-orange-500/10 via-transparent to-indigo-500/5 backdrop-blur-xl border border-white/10 group-hover:border-orange-500/30 transition-colors duration-500"
         style={{ transform: "translateZ(0px)" }}
       />
 
       {/* Holographic Tracking Glow */}
       <motion.div
-        className="absolute inset-0 z-0 pointer-events-none rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        className="absolute inset-0 z-0 pointer-events-none rounded-xl md:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
         style={{
           background: useMotionTemplate`radial-gradient(400px circle at ${useTransform(mouseXSpring, [-0.5, 0.5], ["0%", "100%"])} ${useTransform(mouseYSpring, [-0.5, 0.5], ["0%", "100%"])}, rgba(249, 115, 22, 0.2), transparent)`,
           transform: "translateZ(10px)",
@@ -118,16 +118,16 @@ function SkillCard({ name, delay, Icon }) {
       />
 
       <div
-        className="relative h-full w-full flex flex-col items-center justify-center gap-3 p-4 text-center"
+        className="relative h-full w-full flex flex-col items-center justify-center gap-2 md:gap-3 p-2 md:p-4 text-center"
         style={{ transform: "translateZ(45px)" }}
       >
         {Icon && (
           <div className="relative">
-            <Icon className="w-10 h-10 text-orange-500 transition-transform duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(249,115,22,0.6)]" />
+            <Icon className="w-6 h-6 md:w-10 md:h-10 text-orange-500 transition-transform duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(249,115,22,0.6)]" />
             <div className="absolute inset-0 blur-xl bg-orange-500/20 rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
         )}
-        <span className="text-gray-300 font-black tracking-[0.2em] text-[10px] uppercase group-hover:text-white transition-colors">
+        <span className="text-gray-300 font-black tracking-[0.1em] md:tracking-[0.2em] text-[8px] md:text-[10px] uppercase group-hover:text-white transition-colors line-clamp-1">
           {name}
         </span>
       </div>
@@ -175,16 +175,16 @@ export default function SkillsSection() {
           )}
         </div>
 
-        {/* Category Tabs */}
-        <div className="flex justify-center gap-x-5 gap-y-5 mb-14 flex-wrap items-center">
+        {/* Category Tabs - Compact Wrapped Chips for Mobile */}
+        <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-10 px-2">
           {skillCategories.map((cat, i) => (
             <button
               key={cat.title}
               onClick={() => setActive(i)}
-              className={`px-6 py-3 rounded-full text-sm tracking-wider font-bold transition-all duration-500 border border-white/5 relative group overflow-hidden ${
+              className={`px-3 py-2 md:px-6 md:py-3 rounded-full text-[9px] md:text-xs tracking-widest font-black transition-all duration-500 border border-white/5 relative group overflow-hidden ${
                 active === i
-                  ? "bg-orange-500 text-white shadow-[0_10px_30px_rgba(249,115,22,0.12)]"
-                  : "glass text-gray-500 hover:text-white hover:border-orange-500/20"
+                  ? "text-white shadow-[0_8px_20px_rgba(249,115,22,0.15)] bg-orange-500 border-orange-500/50"
+                  : "glass text-gray-400 hover:text-white hover:border-orange-500/20"
               }`}
             >
               {active === i && (

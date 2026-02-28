@@ -1,4 +1,4 @@
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Inter, Space_Grotesk, Dancing_Script } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/components/layout/ClientLayout";
 
@@ -14,10 +14,21 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 });
 
+const dancingScript = Dancing_Script({
+  subsets: ["latin"],
+  variable: "--font-dancing-script",
+  display: "swap",
+});
+
 export const metadata = {
-  title: "Vedant Gour | Revamped Visionary Portfolio",
+  title: "Vedant Gour | Personal Portfolio",
   description:
-    "A modern-day interactive portfolio experience featuring 3D Scenes, GSAP animations, gesture control, and immersive smooth scroll.",
+    "A modern-day interactive portfolio experience featuring gesture control, GSAP animations, and immersive smooth scroll.",
+  icons: {
+    icon: "/assets/main-logo.png",
+    shortcut: "/assets/main-logo.png",
+    apple: "/assets/main-logo.png",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -25,7 +36,7 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${inter.variable} ${spaceGrotesk.variable} dark`}
+      className={`${inter.variable} ${spaceGrotesk.variable} ${dancingScript.variable} dark`}
     >
       <body className="font-sans antialiased overflow-x-hidden bg-black text-white">
         <ClientLayout>{children}</ClientLayout>

@@ -109,7 +109,9 @@ export default function ProjectDetailsPage({ params }) {
               className="lg:col-span-8 space-y-6"
             >
               <div>
-                <h1 className="text-4xl md:text-6xl font-black mb-3 tracking-tighter leading-none uppercase text-white">
+                <h1
+                  className={`text-4xl md:text-6xl font-black mb-3 tracking-tighter leading-none uppercase ${isLight ? "text-gray-900" : "text-white"}`}
+                >
                   {project.title}
                   <span className="text-orange-500">.</span>
                 </h1>

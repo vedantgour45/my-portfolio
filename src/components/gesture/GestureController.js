@@ -515,40 +515,40 @@ export default function GestureController() {
               initial={{ scale: 0.9, opacity: 0, y: 30 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className={`max-w-2xl w-full ${isLight ? "bg-white/95" : "bg-[#0c0c0e]/95"} backdrop-blur-3xl border ${isLight ? "border-gray-200" : "border-white/10"} rounded-[2rem] overflow-hidden shadow-2xl relative`}
+              className={`max-w-xl w-full max-h-[90vh] flex flex-col ${isLight ? "bg-white/95" : "bg-[#0c0c0e]/95"} backdrop-blur-3xl border ${isLight ? "border-gray-200" : "border-white/10"} rounded-[2rem] overflow-hidden shadow-2xl relative`}
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Header - More Compact */}
-              <div className="relative pt-8 pb-5 px-8 text-center border-b border-white/5 overflow-hidden">
+              {/* Header - ultra-compact on mobile */}
+              <div className="relative pt-4 md:pt-8 pb-3 md:pb-5 px-5 md:px-8 text-center border-b border-white/5 overflow-hidden flex-shrink-0">
                 <div
                   className={`absolute top-0 left-1/2 -translate-x-1/2 w-48 h-48 ${isLight ? "bg-indigo-500/10" : "bg-indigo-500/20"} blur-[80px] rounded-full -mt-24 pointer-events-none`}
                 />
                 <span
-                  className={`text-[9px] uppercase font-black ${isLight ? "text-indigo-600" : "text-indigo-400"} tracking-[0.4em]`}
+                  className={`text-[7px] md:text-[9px] uppercase font-black ${isLight ? "text-indigo-600" : "text-indigo-400"} tracking-[0.4em]`}
                 >
                   Control Guide
                 </span>
                 <h2
-                  className={`text-3xl font-black mt-2 mb-1 tracking-tighter ${isLight ? "text-black" : "text-white"}`}
+                  className={`text-xl md:text-3xl font-black mt-0.5 mb-0.5 tracking-tighter ${isLight ? "text-black" : "text-white"}`}
                 >
                   HAND <span className="text-orange-500">CONTROLS</span>
                 </h2>
                 <p
-                  className={`text-[10px] ${isLight ? "text-gray-500" : "text-gray-400"} font-medium uppercase tracking-[0.1em] max-w-sm mx-auto`}
+                  className={`text-[7px] md:text-[10px] ${isLight ? "text-gray-500" : "text-gray-400"} font-medium uppercase tracking-[0.1em] max-w-xs mx-auto`}
                 >
                   Master the cinematic hands-free interaction.
                 </p>
               </div>
 
-              {/* Grid Content - 2 Columns to save vertical space */}
-              <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-3">
+              {/* Grid Content - Perfect scrolling */}
+              <div className="p-3 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-1.5 md:gap-3 overflow-y-auto">
                 {INSTRUCTIONS.map((i, idx) => (
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 * idx }}
                     key={i.action}
-                    className={`flex items-start gap-4 p-4 rounded-2xl border transition-all duration-300
+                    className={`flex items-center gap-2 md:gap-4 p-2.5 md:p-4 rounded-xl md:rounded-2xl border transition-all duration-300
                       ${
                         isLight
                           ? "bg-gray-50/50 border-gray-100"
@@ -557,18 +557,18 @@ export default function GestureController() {
                     `}
                   >
                     <div
-                      className={`w-10 h-10 rounded-xl ${i.bg} flex items-center justify-center text-lg flex-shrink-0 shadow-sm border ${isLight ? "border-indigo-100/50" : "border-white/5"}`}
+                      className={`w-7 h-7 md:w-10 md:h-10 rounded-lg md:rounded-xl ${i.bg} flex items-center justify-center text-sm md:text-lg flex-shrink-0 shadow-sm border ${isLight ? "border-indigo-100/50" : "border-white/5"}`}
                     >
                       {i.emoji}
                     </div>
                     <div>
                       <h3
-                        className={`font-black text-[10px] uppercase tracking-widest ${isLight ? "text-gray-900" : "text-white"} mb-1`}
+                        className={`font-black text-[8px] md:text-[10px] uppercase tracking-widest ${isLight ? "text-gray-900" : "text-white"} mb-0`}
                       >
                         {i.action}
                       </h3>
                       <p
-                        className={`text-[10px] font-medium leading-tight ${isLight ? "text-gray-500" : "text-gray-400"} opacity-70`}
+                        className={`text-[8px] md:text-[10px] font-medium leading-tight ${isLight ? "text-gray-500" : "text-gray-400"} opacity-70`}
                       >
                         {i.desc}
                       </p>
@@ -576,9 +576,9 @@ export default function GestureController() {
                   </motion.div>
                 ))}
 
-                {/* Confirmation Hint Card */}
+                {/* Confirmation Hint - Hidden on mobile to save space */}
                 <div
-                  className={`flex items-center justify-center p-4 rounded-2xl border border-dashed ${isLight ? "border-gray-200 bg-gray-50/20" : "border-white/10 bg-white/0"}`}
+                  className={`hidden md:flex items-center justify-center p-4 rounded-2xl border border-dashed ${isLight ? "border-gray-200 bg-gray-50/20" : "border-white/10 bg-white/0"}`}
                 >
                   <p
                     className={`text-[9px] font-bold uppercase tracking-widest text-center ${isLight ? "text-gray-400" : "text-gray-600"}`}
@@ -590,17 +590,17 @@ export default function GestureController() {
 
               {/* Action Button - More Compact */}
               <div
-                className={`p-6 border-t ${isLight ? "border-gray-100 bg-gray-50/30" : "border-white/5 bg-black/20"} text-center`}
+                className={`p-3 md:p-6 border-t ${isLight ? "border-gray-100 bg-gray-50/30" : "border-white/5 bg-black/20"} text-center flex-shrink-0`}
               >
                 <button
                   onClick={() => setShowInstructions(false)}
-                  className={`px-10 py-3 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] transition-all
+                  className={`w-full md:w-auto px-6 py-2.5 md:px-10 md:py-3 rounded-xl font-black text-[9px] md:text-[10px] uppercase tracking-[0.2em] transition-all
                     ${
                       isLight
                         ? "bg-black text-white hover:bg-indigo-600"
                         : "bg-indigo-500 text-white hover:bg-white hover:text-black"
                     }
-                    hover:scale-[1.05] active:scale-95 shadow-lg
+                    hover:scale-[1.02] active:scale-95 shadow-lg
                   `}
                 >
                   Start Experience
@@ -624,9 +624,9 @@ export default function GestureController() {
           ●
         </span>
       </div>
-      <div className="fixed bottom-6 right-6 z-[200]">
+      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[200]">
         <div
-          className={`${isLight ? "bg-white/80 border-gray-200 shadow-xl" : "bg-[#0a0a0a]/90 border-white/10 shadow-2xl"} backdrop-blur-3xl rounded-[32px] p-5 border flex flex-col gap-4 min-w-[220px]`}
+          className={`${isLight ? "bg-white/80 border-gray-200 shadow-xl" : "bg-[#0a0a0a]/90 border-white/10 shadow-2xl"} backdrop-blur-3xl rounded-[24px] sm:rounded-[32px] p-3 sm:p-5 border flex flex-col gap-3 sm:gap-4 min-w-[140px] sm:min-w-[220px] shadow-2xl`}
         >
           <div className="flex items-center justify-between px-1">
             <span

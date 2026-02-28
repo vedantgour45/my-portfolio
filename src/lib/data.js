@@ -52,8 +52,8 @@ export const personalInfo = {
   profileImage: "/assets/profile.jpg",
   email: "vedantgour45@gmail.com",
   about: [
-    "I'm a passionate Frontend Developer specializing in React.js, Next.js, and modern web technologies. I love building interactive, performant, and visually stunning user interfaces.",
-    "With a growing interest in AI/ML, I combine creative design thinking with engineering precision to craft digital experiences that push boundaries.",
+    "I’m a Frontend Developer with 2+ years of experience building scalable, high-performance web applications using React.js and TypeScript. I specialize in creating responsive, accessible, and user-focused interfaces with modern tools like Redux, React Query, and Tailwind CSS. Passionate about clean architecture and performance optimization.",
+    "With a growing interest in AI-powered tools, I combine creative design thinking with AI to enhance development speed, code quality, and overall productivity.",
   ],
   stats: [
     { label: "Projects", value: "10+" },

@@ -125,14 +125,8 @@ export default function Navbar() {
                 alt="Logo"
                 width={36}
                 height={36}
-                className="group-hover:rotate-12 transition-transform duration-300"
                 style={{ width: "36px", height: "36px" }}
               />
-              <span
-                className={`text-xs font-bold tracking-[0.3em] uppercase opacity-70 group-hover:opacity-100 transition-opacity hidden sm:inline ${isDark ? "text-white" : "text-gray-900"}`}
-              >
-                <span className="text-orange-500">V.</span>GOUR
-              </span>
             </a>
           </div>
 
@@ -180,17 +174,17 @@ export default function Navbar() {
           {/* Mobile Toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden flex flex-col gap-1.5 p-2 bg-transparent shadow-none"
+            className={`md:hidden relative z-[110] w-10 h-10 flex flex-col items-center justify-center gap-1.5 transition-all duration-300 ${mobileOpen ? "text-orange-500" : isDark ? "text-white" : "text-black"}`}
             aria-label="Menu"
           >
             <span
-              className={`w-6 h-[2px] bg-current transition-all ${mobileOpen ? "rotate-45 translate-y-[5px]" : ""}`}
+              className={`w-6 h-[2px] bg-current rounded-full transition-all duration-300 ${mobileOpen ? "rotate-45 translate-y-[8px]" : ""}`}
             />
             <span
-              className={`w-6 h-[2px] bg-current transition-all ${mobileOpen ? "opacity-0" : ""}`}
+              className={`w-6 h-[2px] bg-current rounded-full transition-all duration-300 ${mobileOpen ? "opacity-0 " : "opacity-100"}`}
             />
             <span
-              className={`w-6 h-[2px] bg-current transition-all ${mobileOpen ? "-rotate-45 -translate-y-[5px]" : ""}`}
+              className={`w-6 h-[2px] bg-current rounded-full transition-all duration-300 ${mobileOpen ? "-rotate-45 -translate-y-[8px]" : ""}`}
             />
           </button>
         </div>
@@ -200,28 +194,45 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, x: "100%" }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: "100%" }}
-            transition={{ type: "spring", damping: 25 }}
-            className="fixed inset-0 z-[99] bg-black/95 backdrop-blur-3xl flex flex-col items-center justify-center gap-8"
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className={`fixed inset-0 z-[99] ${isDark ? "bg-[#0a0a0b]/95" : "bg-white/95"} backdrop-blur-3xl flex flex-col items-center justify-center`}
           >
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => scrollToSection(e, link.href)}
-                className="text-3xl font-bold uppercase tracking-[0.3em] text-white hover:text-indigo-400 transition-colors"
+            {/* Cinematic background glow inside menu */}
+            <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/10 via-transparent to-orange-500/5 pointer-events-none" />
+
+            <div className="relative z-10 flex flex-col items-center gap-8">
+              {navLinks.map((link, i) => (
+                <motion.a
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + i * 0.1 }}
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => {
+                    scrollToSection(e, link.href);
+                    setMobileOpen(false);
+                  }}
+                  className={`text-xl font-black uppercase tracking-[0.4em] transition-all duration-300 hover:text-orange-500 ${isDark ? "text-white/80" : "text-black/80"}`}
+                >
+                  {link.name}
+                </motion.a>
+              ))}
+              <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + navLinks.length * 0.1 }}
+                onClick={toggleTheme}
+                className={`mt-6 flex items-center gap-3 px-6 py-3 rounded-full border transition-all duration-300 ${isDark ? "bg-white/5 border-white/10 text-white hover:bg-white/10" : "bg-black/5 border-black/10 text-black hover:bg-black/10"}`}
               >
-                {link.name}
-              </a>
-            ))}
-            <button
-              onClick={toggleTheme}
-              className="mt-4 text-lg text-gray-400 hover:text-white transition-colors bg-transparent shadow-none"
-            >
-              {isDark ? "☀ Light Mode" : "◑ Dark Mode"}
-            </button>
+                <span className="text-sm">{isDark ? "☀" : "◑"}</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
+                  {isDark ? "Light Mode" : "Dark Mode"}
+                </span>
+              </motion.button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

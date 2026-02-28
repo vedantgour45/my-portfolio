@@ -81,17 +81,20 @@ export default function AboutSection() {
 
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Image with 3D head-tilt effect */}
-          <div ref={imageRef} className="relative group">
+          <div
+            ref={imageRef}
+            className="relative perspective-group !bg-transparent !border-none !shadow-none"
+          >
             <div
               ref={imageContainerRef}
-              className="relative w-full aspect-square max-w-md mx-auto rounded-3xl overflow-hidden"
+              className="relative w-full aspect-square max-w-md mx-auto rounded-3xl overflow-hidden shadow-2xl"
               style={{ transformStyle: "preserve-3d" }}
             >
               <Image
                 src={personalInfo.profileImage}
                 alt={personalInfo.name}
                 fill
-                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                className="object-cover transition-transform duration-700 [.perspective-group:hover_&]:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               {/* Face tracking indicator */}
@@ -105,15 +108,15 @@ export default function AboutSection() {
               )}
             </div>
             {/* Decorative elements */}
-            <div className="absolute -bottom-4 -right-4 w-full h-full border-2 border-orange-500/20 rounded-3xl max-w-md mx-auto" />
-            <div className="absolute -top-4 -left-4 w-20 h-20 border border-orange-500/30 rounded-2xl" />
+            <div className="absolute -bottom-6 right-10 w-full h-full border border-orange-500/30 rounded-3xl max-w-md mx-auto hidden" />
+            <div className="absolute -top-4 left-12 w-20 h-20 border border-orange-500/30 rounded-3xl hidden" />
           </div>
 
           {/* Text */}
-          <div ref={textRef} className="space-y-6">
-            <h3 className="text-4xl font-black tracking-tight text-white uppercase">
+          <div ref={textRef} className="space-y-6 text-center lg:text-left">
+            <h3 className="text-3xl md:text-4xl font-black tracking-tight text-white uppercase">
               {personalInfo.name}
-              <span className="block text-lg text-orange-500 font-medium mt-1 uppercase tracking-[0.2em] font-bold">
+              <span className="block text-base md:text-lg text-orange-500 font-medium mt-1 uppercase tracking-[0.2em] font-bold">
                 {personalInfo.role}
               </span>
             </h3>
@@ -121,17 +124,17 @@ export default function AboutSection() {
             {personalInfo.about.map((p, i) => (
               <p
                 key={i}
-                className="text-gray-400 leading-relaxed text-lg font-light"
+                className="text-gray-400 leading-relaxed text-sm md:text-lg font-light"
               >
                 {p}
               </p>
             ))}
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/10">
+            <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/10 hidden">
               {personalInfo.stats.map((stat) => (
                 <div key={stat.label} className="text-center">
-                  <div className="text-3xl font-black text-white">
+                  <div className="text-2xl md:text-3xl font-black text-white">
                     {stat.value}
                   </div>
                   <div className="text-[10px] uppercase tracking-[0.3em] text-gray-500 mt-2">
@@ -141,13 +144,15 @@ export default function AboutSection() {
               ))}
             </div>
 
-            <a
-              href={personalInfo.resumePath}
-              target="_blank"
-              className="inline-flex items-center gap-3 px-8 py-4 glass rounded-full text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-white/10 transition-all mt-4"
-            >
-              <span>↓</span> Download Resume
-            </a>
+            <div className="flex justify-center lg:justify-start">
+              <a
+                href={personalInfo.resumePath}
+                target="_blank"
+                className="inline-flex items-center gap-3 px-8 py-4 glass rounded-full text-xs tracking-wider font-bold hover:bg-white/10 transition-all"
+              >
+                <span>↓</span> Download Resume
+              </a>
+            </div>
           </div>
         </div>
       </div>
