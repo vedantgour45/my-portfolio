@@ -141,6 +141,8 @@ export default function GestureController() {
   const gestureState = useRef("none");
   const cursorAnimId = useRef(null);
 
+  const [facingMode, setFacingMode] = useState("user");
+  const [hasMultipleCameras, setHasMultipleCameras] = useState(false);
   const previousX = useRef(null);
   const previousTime = useRef(0);
   const streamRef = useRef(null);
@@ -149,14 +151,21 @@ export default function GestureController() {
 
   useEffect(() => {
     setGestureActive(isGesturing);
-    // HIDE NATIVE CURSOR IMMEDIATELY WHEN TOGGLED
-    document.documentElement.style.cursor = active ? "none" : "";
-    document.body.style.cursor = active ? "none" : "";
-    return () => {
-      document.documentElement.style.cursor = "";
-      document.body.style.cursor = "";
+    // Keep native cursor visible as requested, but the virtual one will stay for gestures
+  }, [isGesturing, setGestureActive]);
+
+  useEffect(() => {
+    const checkCameras = async () => {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter((d) => d.kind === "videoinput");
+        setHasMultipleCameras(videoDevices.length > 1);
+      } catch (e) {
+        setHasMultipleCameras(false);
+      }
     };
-  }, [active, isGesturing, setGestureActive]);
+    checkCameras();
+  }, []);
 
   // Handle mouse-to-cursor tracking during onboarding
   useEffect(() => {
@@ -197,7 +206,7 @@ export default function GestureController() {
       250,
     );
     const el = document.elementFromPoint(x, y);
-    if (el) {
+    if (el && typeof el.click === "function") {
       el.click();
     }
   }, []);
@@ -359,9 +368,21 @@ export default function GestureController() {
         }
 
         try {
-          streamRef.current = await navigator.mediaDevices.getUserMedia({
-            video: { width: 640, height: 480, frameRate: 30 },
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              width: { ideal: 640 },
+              height: { ideal: 480 },
+              frameRate: { ideal: 30 },
+              facingMode: facingMode,
+            },
           });
+
+          if (!isActive) {
+            stream.getTracks().forEach((t) => t.stop());
+            return;
+          }
+
+          streamRef.current = stream;
         } catch (mediaErr) {
           throw new Error(
             "Camera Access Denied: Please enable camera permissions to use gestures.",
@@ -472,13 +493,7 @@ export default function GestureController() {
             });
           }
 
-          if (cursorLabelRef.current) {
-            cursorLabelRef.current.textContent = isPinched.current
-              ? dragActive.current
-                ? "DRAG"
-                : "HOLD"
-              : "●";
-          }
+          // Label update removed as per request to hide dot
           animationId = requestAnimationFrame(loop);
         };
         loop();
@@ -506,6 +521,7 @@ export default function GestureController() {
     setHeadRotation,
     isGesturing,
     setCursorPos,
+    facingMode,
   ]);
 
   return (
@@ -618,19 +634,26 @@ export default function GestureController() {
           </motion.div>
         )}
       </AnimatePresence>
-      <div ref={cursorRef} className="gesture-cursor" style={{ opacity: 0 }}>
-        <div
-          className={`gesture-cursor-ring ${isLight ? "border-indigo-600" : "border-indigo-400"}`}
-        />
-        <div
-          className={`gesture-cursor-dot ${isLight ? "bg-indigo-600" : "bg-indigo-400"}`}
-        />
-        <span
-          ref={cursorLabelRef}
-          className={`gesture-cursor-label ${isLight ? "text-indigo-700" : "text-indigo-300"}`}
-        >
-          ●
-        </span>
+      {/* Fiery Gesture Cursor - Igniting Hand Tracking */}
+      <div
+        ref={cursorRef}
+        className="gesture-cursor pointer-events-none select-none"
+        style={{
+          opacity: active ? (isGesturing ? 1 : 0.4) : 0,
+          visibility: active ? "visible" : "hidden",
+        }}
+      >
+        {/* Intense heat-glow core */}
+        <div className="absolute -translate-x-1/2 -translate-y-1/2">
+          {/* Inner core */}
+          <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-br from-yellow-300 via-orange-500 to-amber-600 shadow-[0_0_15px_rgba(249,115,22,0.8)]" />
+
+          {/* Pulsing outer corona */}
+          <div className="absolute inset-0 w-8 h-8 -translate-x-[11px] -translate-y-[11px] rounded-full border border-orange-500/30 animate-pulse bg-orange-500/10 blur-[2px]" />
+
+          {/* Ambient heat rays */}
+          <div className="absolute inset-0 w-12 h-12 -translate-x-[19px] -translate-y-[19px] rounded-full bg-gradient-radial from-orange-500/20 to-transparent blur-md opacity-60" />
+        </div>
       </div>
       <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[200]">
         <div
@@ -664,11 +687,11 @@ export default function GestureController() {
                   autoPlay
                   playsInline
                   muted
-                  className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity"
+                  className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity -scale-x-100"
                 />
                 <canvas
                   ref={canvasRef}
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover -scale-x-100"
                 />
                 <div
                   className={`absolute top-2 left-2 flex items-center gap-1.5 ${isLight ? "bg-white/80 border-gray-100" : "bg-black/60 border-white/10"} backdrop-blur-md px-2.5 py-1.5 rounded-full border`}
@@ -682,6 +705,19 @@ export default function GestureController() {
                     Camera Feed
                   </span>
                 </div>
+                {active && hasMultipleCameras && (
+                  <button
+                    onClick={() =>
+                      setFacingMode((prev) =>
+                        prev === "user" ? "environment" : "user",
+                      )
+                    }
+                    className={`absolute top-2 right-2 p-1.5 rounded-full border shadow-sm transition-all z-20 ${isLight ? "bg-white/80 border-gray-200 text-indigo-600 hover:bg-white" : "bg-black/60 border-white/10 text-indigo-400 hover:bg-black/80"}`}
+                    title="Switch Camera"
+                  >
+                    <Camera className="w-3 h-3" />
+                  </button>
+                )}
                 {isLoading && (
                   <div
                     className={`absolute inset-0 ${isLight ? "bg-white/60" : "bg-black/60"} backdrop-blur-sm flex flex-col items-center justify-center gap-2`}
