@@ -77,7 +77,7 @@ export default function ProjectsSection() {
             PORTFOLIO
           </span>
           <h2 className="text-5xl md:text-7xl font-black mt-4 tracking-tighter">
-            PROJ<span className="text-gradient">.</span>ECTS
+            PROJECTS<span className="text-gradient">.</span>WORK
           </h2>
         </motion.div>
 
