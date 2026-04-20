@@ -36,7 +36,7 @@ function ProjectCard({ project, index }) {
           src={project.image}
           alt={project.title}
           fill
-          className="object-cover transition-all duration-700 group-hover:scale-110 group-hover:blur-sm brightness-[0.8] group-hover:brightness-[0.4]"
+          className="object-cover inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent group-hover:from-black/60 group-hover:to-black/40 blur-sm brightness-[0.3]"
         />
 
         {/* Dynamic Gradient Overlay */}
@@ -44,8 +44,8 @@ function ProjectCard({ project, index }) {
 
         {/* Sliding Text Overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-          <div className="flex flex-col items-center transform translate-y-[135px] group-hover:translate-y-0 transition-transform duration-700 cubic-bezier(0.22, 1, 0.36, 1)">
-            <h3 className="text-xl md:text-2xl font-black tracking-tighter text-white uppercase">
+          <div className="flex flex-col items-center duration-700 cubic-bezier(0.22, 1, 0.36, 1) z-10">
+            <h3 className="text-xl md:text-2xl font-black tracking-tighter !text-white uppercase">
               {project.title}
             </h3>
             <span className="text-[9px] uppercase tracking-[0.4em] text-orange-500 font-bold opacity-0 group-hover:opacity-100 transition-all duration-500 mt-3">

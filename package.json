@@ -23,6 +23,7 @@
     "react-icons": "^5.5.0",
     "sharp": "^0.32.6",
     "tailwind-merge": "^2.0.0",
+    "tegaki": "^0.14.0",
     "three": "0.158.0"
   },
   "devDependencies": {
