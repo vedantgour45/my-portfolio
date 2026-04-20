@@ -1,8 +1,11 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import dynamic from "next/dynamic";
+
+import { TegakiRenderer } from "tegaki";
+import bundle from "tegaki/fonts/caveat";
 
 const HeroScene = dynamic(() => import("@/components/canvas/HeroScene"), {
   ssr: false,
@@ -14,6 +17,28 @@ export default function HeroSection() {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+
+  const [fontSize, setFontSize] = useState(56);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setFontSize(36); // text-4xl
+      } else if (window.innerWidth < 768) {
+        setFontSize(48); // text-5xl
+      } else if (window.innerWidth < 1024) {
+        setFontSize(60); // text-6xl
+      } else {
+        setFontSize(72); // text-7xl
+      }
+    };
+
+    // Set initial size
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <section
@@ -43,17 +68,17 @@ export default function HeroSection() {
           transition={{ duration: 1, delay: 0.4 }}
           className="flex flex-col md:flex-row items-center justify-center gap-x-4 mb-2"
         >
-          <h2 className="text-2xl sm:text-3xl md:text-5xl font-light text-white/50 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-light text-white/80 tracking-tight">
             I&apos;m a
           </h2>
-          <motion.span
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 0.8, scale: 1 }}
-            transition={{ duration: 1.2, delay: 0.6, type: "spring" }}
-            className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-cursive text-orange-400 mt-2 md:mt-0"
+
+          <TegakiRenderer
+            font={bundle}
+            time={{ mode: "uncontrolled", speed: 2, loop: false }}
+            style={{ fontSize: fontSize, color: "#f97316" }}
           >
             Frontend Developer.
-          </motion.span>
+          </TegakiRenderer>
         </motion.div>
 
         {/* Open to Work Badge - Relocated Below Title */}
@@ -63,12 +88,12 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 1 }}
           className="flex justify-center my-5"
         >
-          <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-full glass border border-emerald-500/20 hover:border-emerald-500/40 transition-colors group cursor-default shadow-lg shadow-emerald-500/5">
+          <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-full glass border border-green-500/20 hover:border-green-500/40 transition-colors group cursor-default shadow-lg shadow-green-500/5">
             <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
             </span>
-            <span className="text-[8px] font-black uppercase tracking-[0.25em] text-emerald-400/90 group-hover:text-emerald-300 transition-colors">
+            <span className="text-[8px] font-black uppercase tracking-[0.25em] text-green-600/90 group-hover:text-green-300 transition-colors">
               Open to work
             </span>
           </div>
