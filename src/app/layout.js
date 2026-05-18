@@ -1,34 +1,49 @@
-import { Inter, Space_Grotesk, Dancing_Script } from "next/font/google";
+import { Inter, Space_Grotesk, Caveat } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/components/layout/ClientLayout";
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-sans",
   display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
-const spaceGrotesk = Space_Grotesk({
+const display = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  variable: "--font-display",
   display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
-const dancingScript = Dancing_Script({
+const cursive = Caveat({
   subsets: ["latin"],
-  variable: "--font-dancing-script",
+  variable: "--font-cursive",
   display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata = {
-  title: "Vedant Gour | Personal Portfolio",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://vedantgour.dev",
+  ),
+  title: "Vedant Gour — Frontend Developer",
   description:
-    "A modern-day interactive portfolio experience featuring gesture control, GSAP animations, and immersive smooth scroll.",
+    "Immersive portfolio of Vedant Gour — a frontend developer crafting performant web experiences with React, Next.js & TypeScript.",
   icons: {
     icon: "/assets/main-logo.png",
     shortcut: "/assets/main-logo.png",
     apple: "/assets/main-logo.png",
   },
+  openGraph: {
+    title: "Vedant Gour — Frontend Developer",
+    description: "Frontend Engineer · React · Next.js · TypeScript.",
+    images: ["/assets/profile.jpg"],
+  },
+};
+
+export const viewport = {
+  themeColor: "#0a0a0b",
 };
 
 export default function RootLayout({ children }) {
@@ -36,9 +51,9 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${inter.variable} ${spaceGrotesk.variable} ${dancingScript.variable} dark`}
+      className={`${inter.variable} ${display.variable} ${cursive.variable} dark`}
     >
-      <body className="font-sans antialiased overflow-x-hidden bg-black text-white">
+      <body className="font-sans antialiased overflow-x-hidden">
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

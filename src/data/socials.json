@@ -1,0 +1,17 @@
+[
+  {
+    "name": "LinkedIn",
+    "url": "https://www.linkedin.com/in/vedantgour45",
+    "icon": "SiLinkedin"
+  },
+  {
+    "name": "GitHub",
+    "url": "https://github.com/vedantgour45",
+    "icon": "SiGithub"
+  },
+  {
+    "name": "Email",
+    "url": "mailto:vedantgour45@gmail.com",
+    "icon": "SiGmail"
+  }
+]

@@ -1,18 +1,29 @@
 "use client";
 
-import CustomCursor from "@/components/layout/CustomCursor";
+import dynamic from "next/dynamic";
 import Navbar from "@/components/layout/Navbar";
-import GestureController from "@/components/gesture/GestureController";
 import SmoothScroll from "@/components/layout/SmoothScroll";
-import { GestureProvider } from "@/context/GestureContext";
+import GestureToggle from "@/components/gesture/GestureToggle";
+import { GestureProvider, useGestureContext } from "@/context/GestureContext";
+
+// Heavy MediaPipe controller — only loads when user opts in.
+const GestureController = dynamic(
+  () => import("@/components/gesture/GestureController"),
+  { ssr: false, loading: () => null },
+);
+
+function GestureMount() {
+  const { active } = useGestureContext();
+  return active ? <GestureController /> : null;
+}
 
 export default function ClientLayout({ children }) {
   return (
     <GestureProvider>
-      <CustomCursor />
       <Navbar />
-      <GestureController />
       <SmoothScroll>{children}</SmoothScroll>
+      <GestureToggle />
+      <GestureMount />
     </GestureProvider>
   );
 }

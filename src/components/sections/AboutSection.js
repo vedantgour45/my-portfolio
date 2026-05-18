@@ -2,56 +2,26 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { personalInfo } from "@/lib/data";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useGestureContext } from "@/context/GestureContext";
 
-gsap.registerPlugin(ScrollTrigger);
-
-export default function AboutSection() {
+export default function AboutSection({ personal }) {
   const sectionRef = useRef(null);
-  const imageRef = useRef(null);
   const imageContainerRef = useRef(null);
-  const textRef = useRef(null);
   const { gestureActive, headRotation } = useGestureContext();
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(imageRef.current, {
-        x: -100,
-        opacity: 0,
-        duration: 1,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          end: "top 30%",
-          scrub: 1,
-        },
-      });
-      gsap.from(textRef.current, {
-        x: 100,
-        opacity: 0,
-        duration: 1,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          end: "top 30%",
-          scrub: 1,
-        },
-      });
-    }, sectionRef);
+  // Scroll-driven parallax
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const imgY = useTransform(scrollYProgress, [0, 1], [80, -80]);
+  const textY = useTransform(scrollYProgress, [0, 1], [60, -60]);
 
-    return () => ctx.revert();
-  }, []);
-
-  // Apply head rotation to the image container for 3D tilt effect
+  // Head-tilt 3D effect
   useEffect(() => {
     if (!imageContainerRef.current) return;
-
     if (gestureActive) {
-      // Map head yaw → rotateY, pitch → rotateX (inverted for natural feel)
       const rotX = -headRotation.pitch * 0.8;
       const rotY = headRotation.yaw * 0.8;
       imageContainerRef.current.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
@@ -63,97 +33,97 @@ export default function AboutSection() {
   }, [gestureActive, headRotation]);
 
   return (
-    <section
-      id="about"
-      ref={sectionRef}
-      className="py-16 relative overflow-hidden"
-    >
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Section Header */}
-        <div className="text-center mb-10">
-          <span className="text-[10px] uppercase tracking-[0.5em] text-orange-500 font-bold">
-            PROFILE
-          </span>
-          <h2 className="text-5xl md:text-7xl font-black mt-4 tracking-tighter">
-            ABOUT<span className="text-gradient">.</span>ME
+    <section id="about" ref={sectionRef} className="section">
+      <div className="max-w-7xl mx-auto">
+        {/* Centered header */}
+        <div className="mb-10 text-center">
+          <span className="eyebrow">About</span>
+          <h2 className="display-tight text-4xl md:text-6xl mt-4 max-w-3xl mx-auto">
+            Building polished frontend experiences with{" "}
+            <span className="cursive text-orange-400">
+              attention to every detail
+            </span>{" "}
+            <span className="text-orange-500">.</span>
           </h2>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Image with 3D head-tilt effect */}
-          <div
-            ref={imageRef}
-            className="relative perspective-group !bg-transparent !border-none !shadow-none"
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+          {/* Image */}
+          <motion.div
+            style={{ y: imgY }}
+            className="lg:col-span-5 lg:sticky lg:top-28"
           >
             <div
               ref={imageContainerRef}
-              className="relative w-full aspect-square max-w-md mx-auto rounded-3xl overflow-hidden shadow-2xl"
+              className="relative aspect-[4/5] max-w-md mx-auto rounded-2xl overflow-hidden"
               style={{ transformStyle: "preserve-3d" }}
             >
               <Image
-                src={personalInfo.profileImage}
-                alt={personalInfo.name}
+                src={personal.profileImage}
+                alt={personal.name}
                 fill
-                className="object-cover transition-transform duration-700 [.perspective-group:hover_&]:scale-105"
+                sizes="(max-width: 1024px) 100vw, 40vw"
+                className="object-cover"
+                priority={false}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-              {/* Face tracking indicator */}
-              {gestureActive && (
-                <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/50 backdrop-blur-md rounded-full px-2.5 py-1">
-                  <span className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse" />
-                  <span className="text-[8px] text-orange-500 font-bold uppercase tracking-wider">
-                    Face Tracking Enabled
-                  </span>
-                </div>
-              )}
             </div>
-            {/* Decorative elements */}
-            <div className="absolute -bottom-6 right-10 w-full h-full border border-orange-500/30 rounded-3xl max-w-md mx-auto hidden" />
-            <div className="absolute -top-4 left-12 w-20 h-20 border border-orange-500/30 rounded-3xl hidden" />
-          </div>
+          </motion.div>
 
           {/* Text */}
-          <div ref={textRef} className="space-y-6 text-center lg:text-left">
-            <h3 className="text-3xl md:text-4xl font-black tracking-tight text-white uppercase">
-              {personalInfo.name}
-              <span className="block text-base md:text-lg text-orange-500 font-medium mt-1 uppercase tracking-[0.2em] font-bold">
-                {personalInfo.role}
-              </span>
-            </h3>
-
-            {personalInfo.about.map((p, i) => (
-              <p
-                key={i}
-                className="text-gray-400 leading-relaxed text-sm md:text-lg font-light"
-              >
-                {p}
-              </p>
-            ))}
-
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/10 hidden">
-              {personalInfo.stats.map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <div className="text-2xl md:text-3xl font-black text-white">
-                    {stat.value}
-                  </div>
-                  <div className="text-[10px] uppercase tracking-[0.3em] text-gray-500 mt-2">
-                    {stat.label}
-                  </div>
-                </div>
+          <motion.div style={{ y: textY }} className="lg:col-span-7 space-y-6">
+            <div className="space-y-5 max-w-xl">
+              {personal.about.map((p, i) => (
+                <motion.p
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.6, delay: i * 0.1 }}
+                  className="leading-relaxed text-base md:text-lg font-light"
+                  style={{ color: "var(--muted)" }}
+                >
+                  {p}
+                </motion.p>
               ))}
             </div>
 
-            <div className="flex justify-center lg:justify-start">
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-6 pt-8 border-t border-current/10">
+              {personal.stats.map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2 + i * 0.1 }}
+                >
+                  <div className="display text-4xl md:text-5xl">
+                    {stat.value}
+                  </div>
+                  <div
+                    className="text-[10px] uppercase tracking-[0.25em] mt-2"
+                    style={{ color: "var(--muted)" }}
+                  >
+                    {stat.label}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="pt-4">
               <a
-                href={personalInfo.resumePath}
+                href={personal.resumePath}
                 target="_blank"
-                className="inline-flex items-center gap-3 px-8 py-4 glass rounded-full text-xs tracking-wider font-bold hover:bg-white/10 transition-all"
+                rel="noopener noreferrer"
+                className="btn btn-ghost group"
               >
-                <span>↓</span> Download Resume
+                <span>Download Resume</span>
+                <span className="inline-block transition-transform group-hover:translate-y-0.5">
+                  ↓
+                </span>
               </a>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

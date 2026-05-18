@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "role": "Frontend Developer",
+    "company": "Wowlabz",
+    "location": "Bengaluru, Karnataka",
+    "start": "Feb 2024",
+    "end": "Present",
+    "current": true
+  },
+  {
+    "id": 2,
+    "role": "Chat Associate",
+    "company": "TTEC India Customer Solutions Pvt. Ltd.",
+    "location": "Ahmedabad, Gujarat",
+    "start": "Jun 2019",
+    "end": "Aug 2022",
+    "current": false
+  }
+]

@@ -1,0 +1,96 @@
+[
+  {
+    "title": "Frontend",
+    "skills": [
+      { "name": "React.js", "level": 95, "icon": "SiReact" },
+      { "name": "Next.js", "level": 90, "icon": "SiNextdotjs" },
+      { "name": "TypeScript", "level": 90, "icon": "SiTypescript" },
+      { "name": "JavaScript (ES6+)", "level": 92, "icon": "SiJavascript" },
+      { "name": "HTML5", "level": 95, "icon": "SiHtml5" },
+      { "name": "CSS3", "level": 90, "icon": "SiCss3" },
+      { "name": "Tailwind CSS", "level": 95, "icon": "SiTailwindcss" },
+      { "name": "Material UI", "level": 80, "icon": "SiMui" }
+    ]
+  },
+  {
+    "title": "State Management",
+    "skills": [
+      { "name": "Redux Toolkit", "level": 88, "icon": "SiRedux" },
+      { "name": "Zustand", "level": 80, "icon": "TbBrandRedux" }
+    ]
+  },
+  {
+    "title": "Performance",
+    "skills": [
+      { "name": "Core Web Vitals", "level": 90, "icon": "MdSpeed" },
+      { "name": "Lighthouse", "level": 85, "icon": "SiLighthouse" },
+      { "name": "Chrome DevTools", "level": 90, "icon": "SiGooglechrome" },
+      { "name": "Code Splitting", "level": 88, "icon": "SiWebpack" },
+      { "name": "Lazy Loading", "level": 90, "icon": "MdSpeed" },
+      { "name": "Memoization", "level": 85, "icon": "SiReact" }
+    ]
+  },
+  {
+    "title": "Data Fetching",
+    "skills": [
+      { "name": "REST APIs", "level": 90, "icon": "SiFastapi" },
+      { "name": "GraphQL", "level": 80, "icon": "SiGraphql" },
+      { "name": "Apollo Client", "level": 80, "icon": "SiApollographql" },
+      { "name": "React Query", "level": 88, "icon": "SiReactquery" },
+      { "name": "Axios", "level": 92, "icon": "SiAxios" }
+    ]
+  },
+  {
+    "title": "Testing & Quality",
+    "skills": [
+      { "name": "Jest", "level": 80, "icon": "SiJest" },
+      { "name": "React Testing Library", "level": 80, "icon": "SiTestinglibrary" },
+      { "name": "ESLint", "level": 85, "icon": "SiEslint" },
+      { "name": "Prettier", "level": 90, "icon": "SiPrettier" },
+      { "name": "Accessibility (WCAG)", "level": 85, "icon": "MdAccessibility" }
+    ]
+  },
+  {
+    "title": "AI-Assisted Dev",
+    "skills": [
+      { "name": "Cursor", "level": 92, "icon": "MdAutoAwesome" },
+      { "name": "Claude Code", "level": 95, "icon": "SiClaude" },
+      { "name": "GitHub Copilot", "level": 90, "icon": "SiGithubcopilot" },
+      { "name": "Antigravity", "level": 80, "icon": "MdAutoAwesome" },
+      { "name": "ChatGPT", "level": 90, "icon": "SiOpenai" },
+      { "name": "Gemini", "level": 85, "icon": "SiGooglegemini" }
+    ]
+  },
+  {
+    "title": "Tools & Platforms",
+    "skills": [
+      { "name": "Git", "level": 92, "icon": "SiGit" },
+      { "name": "GitHub", "level": 92, "icon": "SiGithub" },
+      { "name": "Bitbucket", "level": 80, "icon": "SiBitbucket" },
+      { "name": "Vite", "level": 88, "icon": "SiVite" },
+      { "name": "Figma", "level": 75, "icon": "SiFigma" },
+      { "name": "Postman", "level": 85, "icon": "SiPostman" },
+      { "name": "Jira", "level": 80, "icon": "SiJira" }
+    ]
+  },
+  {
+    "title": "Backend",
+    "skills": [
+      { "name": "Node.js", "level": 70, "icon": "SiNodedotjs" },
+      { "name": "Express.js", "level": 70, "icon": "SiExpress" },
+      { "name": "MongoDB", "level": 65, "icon": "SiMongodb" },
+      { "name": "Supabase", "level": 65, "icon": "SiSupabase" },
+      { "name": "Firestore", "level": 80, "icon": "SiFirebase" }
+    ]
+  },
+  {
+    "title": "Deploy",
+    "skills": [
+      { "name": "Vercel", "level": 85, "icon": "SiVercel" },
+      { "name": "Netlify", "level": 80, "icon": "SiNetlify" },
+      { "name": "Firebase Hosting", "level": 75, "icon": "SiFirebase" },
+      { "name": "GitHub Actions", "level": 70, "icon": "SiGithubactions" },
+      { "name": "Railway", "level": 70, "icon": "SiRailway" }
+    ]
+  }
+]

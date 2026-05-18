@@ -1,0 +1,113 @@
+[
+  {
+    "id": 7,
+    "title": "Developer Workspace",
+    "subtitle": "Kanban Board & Notes App",
+    "year": "2025",
+    "category": "Productivity",
+    "description": "A modern productivity hub built using a microfrontend architecture, featuring a drag-and-drop Kanban board for task management and an integrated notes editor for seamless organization. Designed with a responsive interface, authentication, and real-time capabilities to streamline productivity and collaboration.",
+    "tech": [
+      "React.js",
+      "TypeScript",
+      "Module Federation",
+      "Zustand",
+      "Supabase",
+      "Tailwind CSS"
+    ],
+    "image": "/assets/project7-workspace.png",
+    "demo": "https://dw-workspace.vercel.app",
+    "code": "https://github.com/vedantgour45/developer-workspace",
+    "slug": "developer-workspace",
+    "featured": true
+  },
+  {
+    "id": 3,
+    "title": "Type Flow",
+    "subtitle": "Typing Speed Test",
+    "year": "2023",
+    "category": "Productivity",
+    "description": "A professional typing test platform that evaluates WPM and accuracy across multiple time modes with interactive chart visualizations and custom themes.",
+    "tech": [
+      "React.js",
+      "Firebase",
+      "Material UI",
+      "Chart.js",
+      "Styled Components"
+    ],
+    "image": "/assets/project2-typingtest.png",
+    "demo": "https://keys-to-success-typing-test.netlify.app/",
+    "code": "https://github.com/vedantgour45/typing-test-website",
+    "slug": "typingtest",
+    "featured": false
+  },
+  {
+    "id": 1,
+    "title": "Movie Pulse",
+    "subtitle": "Movies & TV Shows App",
+    "year": "2024",
+    "category": "Entertainment",
+    "description": "A feature-rich entertainment platform to explore movies and TV shows, featuring trailers, cast details, ratings, and trending categories powered by the TMDB API.",
+    "tech": ["React.js", "Redux Toolkit", "Sass", "Axios", "TMDB API"],
+    "image": "/assets/project-movix-new.png",
+    "demo": "https://movix-movies.netlify.app/",
+    "code": "https://github.com/vedantgour45/movie-app",
+    "slug": "movix",
+    "featured": true
+  },
+  {
+    "id": 2,
+    "title": "LinkedIn Clone",
+    "subtitle": "Professional Networking Platform",
+    "year": "2023",
+    "category": "Social",
+    "description": "A comprehensive LinkedIn replica featuring Google authentication, real-time posts with image/video sharing, and a fully responsive professional interface.",
+    "tech": ["React.js", "Redux", "Firebase", "Styled Components"],
+    "image": "/assets/project1-linkedin.png",
+    "demo": "https://aspire-linked.netlify.app/",
+    "code": "https://github.com/vedantgour45/linkedin-clone",
+    "slug": "linkedin",
+    "featured": true
+  },
+  {
+    "id": 4,
+    "title": "Swift Suite",
+    "subtitle": "AI-Powered Utility & Content Suite",
+    "year": "2024",
+    "category": "AI / Tools",
+    "description": "A sophisticated multipurpose dashboard integrating 11+ high-performance tools for content creators and developers. It features deep article summarization via GPT-based APIs, cross-language translation, and real-time grammar correction. Built with a focus on UX, the app includes localized history tracking, custom QR generation with image export, and developer utilities like JSON formatting—all wrapped in a premium, glassmorphic grid interface with seamless state persistence.",
+    "tech": ["React.js", "RTK Query", "Tailwind CSS", "RapidAPI"],
+    "image": "/assets/project4-swiftsuite.png",
+    "demo": "https://tools-swiftsuite.netlify.app/",
+    "code": "https://github.com/vedantgour45/SwiftSuite",
+    "slug": "swiftsuite",
+    "featured": true
+  },
+    {
+    "id": 6,
+    "title": "Personal Portfolio",
+    "subtitle": "Cinematic Developer Showcase",
+    "year": "2025",
+    "category": "Portfolio",
+    "description": "A high-performance, immersive portfolio featuring fluid GSAP and Framer Motion animations and a refined glassmorphic UI. Designed to provide a premium user experience while showcasing complex frontend architecture.",
+    "tech": ["Next.js", "Tailwind CSS", "Framer Motion", "Three.js"],
+    "image": "/assets/project6-portfolio.png",
+    "demo": "https://portfolio-vedant-gour.netlify.app/",
+    "code": "https://github.com/vedantgour45/my-portfolio",
+    "slug": "portfolio",
+    "featured": true
+  },
+  {
+    "id": 5,
+    "title": "Number Hunter",
+    "subtitle": "Logic-based Game",
+    "year": "2022",
+    "category": "Game",
+    "description": "A sleek, interactive number-guessing game featuring real-time feedback, high-score persistence, and dynamic visual effects like screen shakes and confetti.",
+    "tech": ["HTML", "CSS", "JavaScript"],
+    "image": "/assets/project5-numberHunter.png",
+    "demo": "https://guess-vg-number.netlify.app/",
+    "code": "https://github.com/vedantgour45/Guess-my-number-game",
+    "slug": "guess-my-number",
+    "featured": false
+  }
+]

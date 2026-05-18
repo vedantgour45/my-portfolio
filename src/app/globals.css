@@ -2,239 +2,253 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-
-  /* Default: Dark Mode */
-  /* Default: Dark Mode */
-  body {
-    @apply text-white antialiased;
-    background: radial-gradient(circle at 50% -20%, #1e1b4b 0%, #000 70%) no-repeat fixed;
-    font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
-  }
-}
-
-@layer components {
-
-  /* ─── Glassmorphism ──────────────────────────── */
-  .glass {
-    @apply backdrop-blur-2xl bg-white/[0.02] border border-white/[0.05];
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-  }
-
-  /* ─── Gradient Text ──────────────────────────── */
-  .text-gradient {
-    @apply bg-gradient-to-r from-orange-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent;
-  }
-
-  .text-highlight {
-    @apply text-orange-500 font-bold;
-  }
-
-  .font-cursive {
-    font-family: var(--font-dancing-script), cursive;
-  }
-}
-
 /* ═══════════════════════════════════════════════════
-   DARK MODE (default)
+   BASE
    ═══════════════════════════════════════════════════ */
-.dark body,
-body {
-  background: radial-gradient(circle at 50% -20%, #2e1065 0%, #000 80%) no-repeat fixed;
-  color: #fff;
-}
+@layer base {
+  :root {
+    --bg: #050507;
+    --bg-elev: #0d0d12;
+    --fg: #f5f5f7;
+    --muted: #8e8e93;
+    --accent: #fb923c;
+    --accent-soft: rgba(251, 146, 60, 0.12);
+    --line: rgba(255, 255, 255, 0.08);
+    /* Hero starfield icon tint — orange in dark, soft grey in light */
+    --hero-icon: #fb923c;
+  }
 
-.hero-bg {
-  background: transparent;
-  /* Body handles the gradient */
-}
+  .light {
+    --bg: #f7f6f3;
+    --bg-elev: #ffffff;
+    --fg: #111114;
+    --muted: #6b6b70;
+    --accent: #f97316;
+    --accent-soft: rgba(249, 115, 22, 0.1);
+    --line: rgba(0, 0, 0, 0.08);
+    --hero-icon: #6b7280;
+  }
 
-.hero-title {
-  color: #fff;
-  letter-spacing: -0.04em;
-}
+  html {
+    scroll-behavior: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
 
-.hero-subtitle {
-  color: #94a3b8;
-}
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+    overflow-x: hidden;
+  }
 
-.hero-btn {
-  color: #fff;
-}
+  /* Cinematic background gradient */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    background:
+      radial-gradient(60% 50% at 50% 0%, rgba(251, 146, 60, 0.08) 0%, transparent 60%),
+      radial-gradient(40% 40% at 90% 100%, rgba(99, 102, 241, 0.06) 0%, transparent 70%),
+      radial-gradient(50% 40% at 10% 100%, rgba(168, 85, 247, 0.05) 0%, transparent 70%);
+  }
 
-.hud-text {
-  color: #475569;
-}
+  .light body::before {
+    background:
+      radial-gradient(60% 50% at 50% 0%, rgba(249, 115, 22, 0.06) 0%, transparent 60%),
+      radial-gradient(40% 40% at 90% 100%, rgba(99, 102, 241, 0.05) 0%, transparent 70%),
+      radial-gradient(50% 40% at 10% 100%, rgba(168, 85, 247, 0.04) 0%, transparent 70%);
+  }
 
-.navbar-scrolled {
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(40px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  /* Grain overlay */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.04;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: #0a0a0b;
+  }
 }
 
 /* ═══════════════════════════════════════════════════
-   LIGHT MODE
+   COMPONENTS
+   ═══════════════════════════════════════════════════ */
+@layer components {
+  /* Editorial display heading */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+  }
+
+  .display-tight {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.06em;
+    line-height: 0.9;
+  }
+
+  .cursive {
+    font-family: var(--font-cursive);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  /* Section eyebrow label */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-[10px] uppercase font-medium;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+  }
+
+  .eyebrow::before {
+    content: "";
+    width: 24px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.4;
+  }
+
+  /* Glass card */
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .light .glass {
+    background: rgba(255, 255, 255, 0.65);
+    border-color: rgba(0, 0, 0, 0.06);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+  }
+
+  /* Gradient text */
+  .text-gradient {
+    background: linear-gradient(90deg, #fb923c 0%, #a855f7 50%, #6366f1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Button base */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-[11px] uppercase font-medium transition-all duration-300;
+    letter-spacing: 0.25em;
+  }
+
+  .btn-primary {
+    background: var(--fg);
+    color: var(--bg);
+  }
+  .btn-primary:hover {
+    background: var(--accent);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    border: 1px solid var(--line);
+    color: var(--fg);
+  }
+  .btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Section container — keep the navbar offset tight so anchor-nav lands
+     on the heading, not a wall of empty space. Section-to-section spacing
+     comes from each side's padding doubling up. */
+  .section {
+    @apply relative pb-32 px-6;
+    scroll-margin-top: 64px;
+  }
+
+  .container-narrow {
+    @apply max-w-6xl mx-auto;
+  }
+
+  /* Utility — fully hide native scrollbars while preserving scrollability */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Form input — theme-aware via CSS variables (browser UA defaults bleed
+     through unless we set bg + color + border explicitly per mode). */
+  .form-input {
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--fg);
+  }
+  .form-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+  .light .form-input {
+    background-color: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: var(--fg);
+  }
+  .light .form-input::placeholder {
+    color: rgba(0, 0, 0, 0.35);
+  }
+  /* Kill Chrome/Safari autofill blue/yellow flash */
+  .form-input:-webkit-autofill,
+  .form-input:-webkit-autofill:focus,
+  .form-input:-webkit-autofill:hover {
+    -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.04) inset;
+    -webkit-text-fill-color: var(--fg);
+    caret-color: var(--fg);
+    transition: background-color 9999s ease-in-out 0s;
+  }
+  .light .form-input:-webkit-autofill,
+  .light .form-input:-webkit-autofill:focus,
+  .light .form-input:-webkit-autofill:hover {
+    -webkit-box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0.03) inset;
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   LIGHT MODE OVERRIDES
    ═══════════════════════════════════════════════════ */
 .light body {
-  /* Full-page cinematic gradient — mirrors dark mode structure */
-  background: radial-gradient(ellipse at 50% -10%, #dde1f5 0%, #ede9f8 30%, #f5f5fb 65%, #ffffff 100%) no-repeat fixed;
-  color: #111;
-}
-
-.light .hero-bg {
-  /* Transparent — let the body gradient show through */
-  background: transparent;
-}
-
-.light .hero-title {
-  color: #111;
-}
-
-.light .hero-subtitle {
-  color: #555;
-}
-
-.light .hero-btn {
-  color: #111;
-}
-
-.light .hud-text {
-  color: #999;
-}
-
-.light .navbar-scrolled {
-  background: rgba(245, 245, 251, 0.75);
-  backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(99, 102, 241, 0.08);
-}
-
-/* Non-scrolled light navbar — transparent */
-.light nav:not(.navbar-scrolled) {
-  background: transparent;
-}
-
-.light nav a,
-.light nav span {
-  color: #333;
-}
-
-.light nav a:hover {
-  color: #111;
-}
-
-.light .glass {
-  background: rgba(255, 255, 255, 0.5);
-  border-color: rgba(99, 102, 241, 0.1);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 2px 12px 0 rgba(99, 102, 241, 0.06);
-}
-
-.light section {
-  color: #111;
-}
-
-.light section h2,
-.light section h3 {
-  color: #111;
-}
-
-.light section p {
-  color: #555;
-}
-
-.light section .text-gray-400 {
-  color: #444;
-}
-
-.light section .text-gray-500 {
-  color: #555;
-}
-
-.light section .text-gray-300 {
-  color: #666;
-}
-
-/* Prevent text-white override inside active buttons and project cards in light mode */
-.light section .text-white:not(button *):not(.group *) {
-  color: #111;
-}
-
-/* Active skill/section buttons in light mode keep white text */
-.light button.bg-orange-500,
-.light button.bg-orange-500 * {
-  color: white !important;
-}
-
-/* Light mode form inputs */
-.light input,
-.light textarea {
-  background: rgba(0, 0, 0, 0.03) !important;
-  border-color: rgba(0, 0, 0, 0.1) !important;
-  color: #111 !important;
-}
-
-.light input::placeholder,
-.light textarea::placeholder {
-  color: #aaa !important;
-}
-
-/* Light mode buttons */
-.light .bg-indigo-500 {
-  background: #4f46e5;
-  color: white !important;
-}
-
-/* Light mode footer */
-.light footer {
-  border-color: rgba(0, 0, 0, 0.08);
-  color: #888;
-}
-
-.light footer a {
-  color: #888;
-}
-
-.light footer a:hover {
-  color: #4f46e5;
-}
-
-/* Light mode 3D scene overlay */
-.light canvas {
-  opacity: 0.7;
-}
-
-/* Suppress heavy dark shadows on buttons/cards in light mode */
-.light [class*="shadow"] {
-  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.06) !important;
-}
-
-/* Keep the orange glow on active tabs subtle */
-.light .shadow-\[0_10px_30px_rgba\(249\,115\,22\,0\.12\)\] {
-  box-shadow: 0 4px 16px 0 rgba(249, 115, 22, 0.15) !important;
-}
-
-/* Light mode cards — only non-button group divs */
-.light section div.group {
-  background: rgba(255, 255, 255, 0.5);
-  border-color: rgba(99, 102, 241, 0.08);
-  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.04);
-}
-
-.light section div.group:hover {
-  border-color: rgba(249, 115, 22, 0.2);
-  box-shadow: 0 4px 16px 0 rgba(99, 102, 241, 0.06);
-}
-
-/* Light mode skill bars */
-.light .bg-white\/5 {
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--bg);
+  color: var(--fg);
 }
 
 /* ═══════════════════════════════════════════════════
-   GLOBAL UTILITIES
+   SCROLL PROGRESS BAR
    ═══════════════════════════════════════════════════ */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #fb923c, #a855f7, #6366f1);
+  transform-origin: left;
+  z-index: 1000;
+  pointer-events: none;
+}
 
-/* Lenis smooth scroll */
+/* ═══════════════════════════════════════════════════
+   LENIS
+   ═══════════════════════════════════════════════════ */
 html.lenis,
 html.lenis body {
   height: auto;
@@ -244,60 +258,44 @@ html.lenis body {
   scroll-behavior: auto !important;
 }
 
-/* Canvas optimization */
-canvas {
-  touch-action: none;
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
 }
 
-/* Selection color */
-::selection {
-  background: rgba(99, 102, 241, 0.3);
-  color: inherit;
-}
-
-/* Scrollbar – dark */
+/* ═══════════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════════ */
 ::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
-
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: rgba(99, 102, 241, 0.3);
+  background: rgba(251, 146, 60, 0.25);
   border-radius: 3px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(99, 102, 241, 0.5);
+  background: rgba(251, 146, 60, 0.5);
 }
-
-/* Scrollbar – light */
 .light ::-webkit-scrollbar-thumb {
-  background: rgba(99, 102, 241, 0.2);
+  background: rgba(249, 115, 22, 0.2);
 }
-
 .light ::-webkit-scrollbar-thumb:hover {
-  background: rgba(99, 102, 241, 0.4);
+  background: rgba(249, 115, 22, 0.4);
 }
 
-/* Smooth theme transition */
-body,
-section,
-nav,
-.glass,
-input,
-textarea,
-footer,
+/* ═══════════════════════════════════════════════════
+   CANVAS
+   ═══════════════════════════════════════════════════ */
 canvas {
-  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, opacity 0.5s ease;
+  touch-action: none;
+  display: block;
 }
 
 /* ═══════════════════════════════════════════════════
    GESTURE CURSOR
-   Uses transform for GPU acceleration. Updated via
-   direct DOM manipulation (not React state) for 60fps.
    ═══════════════════════════════════════════════════ */
 .gesture-cursor {
   position: fixed;
@@ -312,27 +310,32 @@ canvas {
 .gesture-cursor-ring {
   width: 40px;
   height: 40px;
-  border: 2px solid rgba(99, 102, 241, 0.6);
+  border: 2px solid rgba(251, 146, 60, 0.6);
   border-radius: 50%;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 15px rgba(99, 102, 241, 0.15), inset 0 0 8px rgba(99, 102, 241, 0.08);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, width 0.15s ease, height 0.15s ease;
+  box-shadow:
+    0 0 15px rgba(251, 146, 60, 0.15),
+    inset 0 0 8px rgba(251, 146, 60, 0.08);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    width 0.15s ease,
+    height 0.15s ease;
 }
 
 .gesture-cursor-dot {
   width: 6px;
   height: 6px;
-  background: #818cf8;
+  background: #fb923c;
   border-radius: 50%;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 6px rgba(99, 102, 241, 0.5);
-  transition: background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 0 6px rgba(251, 146, 60, 0.5);
 }
 
 .gesture-cursor-label {
@@ -344,20 +347,33 @@ canvas {
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #818cf8;
+  color: #fb923c;
   white-space: nowrap;
-  transition: color 0.2s ease;
 }
 
-/* Click flash animation */
 .gesture-click-flash .gesture-cursor-ring {
   width: 55px;
   height: 55px;
-  border-color: rgba(129, 230, 160, 0.8);
-  box-shadow: 0 0 30px rgba(74, 222, 128, 0.4), inset 0 0 15px rgba(74, 222, 128, 0.15);
+  border-color: rgba(74, 222, 128, 0.8);
+  box-shadow:
+    0 0 30px rgba(74, 222, 128, 0.4),
+    inset 0 0 15px rgba(74, 222, 128, 0.15);
 }
 
 .gesture-click-flash .gesture-cursor-dot {
   background: #4ade80;
   box-shadow: 0 0 12px rgba(74, 222, 128, 0.7);
+}
+
+/* ═══════════════════════════════════════════════════
+   REDUCED MOTION
+   ═══════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
