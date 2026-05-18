@@ -1,143 +1,126 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import dynamic from "next/dynamic";
 
-import { TegakiRenderer } from "tegaki";
-import bundle from "tegaki/fonts/caveat";
-
 const HeroScene = dynamic(() => import("@/components/canvas/HeroScene"), {
   ssr: false,
-  loading: () => <div className="absolute inset-0 z-0 hero-bg" />,
+  loading: () => <div className="absolute inset-0 z-0" />,
 });
 
-export default function HeroSection() {
+export default function HeroSection({ personal }) {
   const containerRef = useRef(null);
-  const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
-
-  const [fontSize, setFontSize] = useState(56);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 640) {
-        setFontSize(36); // text-4xl
-      } else if (window.innerWidth < 768) {
-        setFontSize(48); // text-5xl
-      } else if (window.innerWidth < 1024) {
-        setFontSize(60); // text-6xl
-      } else {
-        setFontSize(72); // text-7xl
-      }
-    };
-
-    // Set initial size
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   return (
     <section
       id="home"
       ref={containerRef}
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden hero-bg"
+      className="relative min-h-[100svh] flex flex-col items-center justify-center overflow-hidden"
     >
       <HeroScene />
 
-      <motion.div style={{ y: y1, opacity }} className="z-10 text-center px-6">
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
-          className="text-[10px] uppercase tracking-[0.4em] text-indigo-300 font-bold mb-6"
-        >
-          Let&apos;s build something together
-        </motion.p>
-
-        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-2 tracking-tighter hero-title">
-          Hello, I&apos;m <span className="text-orange-500">Vedant</span>
-        </h1>
-
+      <motion.div
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="relative z-10 text-center px-6 max-w-5xl"
+      >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.4 }}
-          className="flex flex-col md:flex-row items-center justify-center gap-x-4 mb-2"
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="flex items-center justify-center gap-2.5 mb-8"
         >
-          <h2 className="text-2xl sm:text-3xl md:text-5xl font-light text-white/80 tracking-tight">
-            I&apos;m a
-          </h2>
-
-          <TegakiRenderer
-            font={bundle}
-            time={{ mode: "uncontrolled", speed: 2, loop: false }}
-            style={{ fontSize: fontSize, color: "#f97316" }}
-          >
-            Frontend Developer.
-          </TegakiRenderer>
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+          </span>
+          <span className="text-[10px] uppercase tracking-[0.3em] text-emerald-400/80 font-medium">
+            {personal.availability || "Open to work"}
+          </span>
         </motion.div>
 
-        {/* Open to Work Badge - Relocated Below Title */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
-          className="flex justify-center my-5"
+          transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="display-tight text-[clamp(2.5rem,8vw,7rem)] leading-[0.95] text-center"
         >
-          <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-full glass border border-green-500/20 hover:border-green-500/40 transition-colors group cursor-default shadow-lg shadow-green-500/5">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
+          <span className="whitespace-nowrap">
+            {personal.intro || "Hello, I'm"}
+          </span>{" "}
+          <span className="whitespace-nowrap">
+            <span className="text-gradient">
+              {personal.name?.split(" ")[0] || "Vedant"}
             </span>
-            <span className="text-[8px] font-black uppercase tracking-[0.25em] text-green-600/90 group-hover:text-green-300 transition-colors">
-              Open to work
-            </span>
-          </div>
+            <span className="text-orange-500">.</span>
+          </span>
+        </motion.h1>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.5 }}
+          className="mt-4 mb-7 text-[clamp(1.25rem,2.5vw,2rem)]"
+        >
+          <span style={{ color: "var(--muted)" }}>a </span>
+          <span className="cursive text-orange-400">
+            {personal.subRole || personal.role}
+          </span>
         </motion.div>
 
         <motion.p
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 0.8, scale: 1 }}
-          transition={{ duration: 1, delay: 0.8 }}
-          className="text-sm md:text-xl font-light tracking-wide max-w-2xl mx-auto leading-relaxed hero-subtitle text-gray-300"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.7 }}
+          className="text-sm md:text-base font-light tracking-wide max-w-xl mx-auto leading-relaxed"
+          style={{ color: "var(--muted)" }}
         >
-          Focused on crafting intuitive, interactive, and visually compelling
-          web experiences. Let&apos;s bring your ideas to life.
+          {personal.heroBlurb}
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 1.2 }}
-          className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
+          transition={{ duration: 1, delay: 0.9 }}
+          className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3"
         >
-          <a
-            href="#projects"
-            className="w-full sm:w-auto px-10 py-4 glass text-[10px] tracking-[0.2em] font-bold rounded-full hover:bg-white/10 transition-colors uppercase border border-white/10 shadow-none hero-btn text-center"
-          >
-            Explore Work
+          <a href="#projects" className="btn btn-primary group">
+            <span>Explore Work</span>
+            <span className="inline-block transition-transform group-hover:translate-x-1">
+              →
+            </span>
           </a>
           <a
-            href="/assets/resume.pdf"
+            href={personal.resumePath || "/assets/resume.pdf"}
             target="_blank"
-            className="w-full sm:w-auto px-10 py-4 border-2 border-orange-500/30 text-[10px] tracking-[0.2em] font-bold rounded-full hover:bg-orange-500/10 transition-colors uppercase bg-transparent shadow-none hero-btn text-center"
+            rel="noopener noreferrer"
+            className="btn btn-ghost"
           >
             Resume
           </a>
         </motion.div>
       </motion.div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-4 z-20">
-        <div className="w-[1px] h-16 bg-gradient-to-b from-orange-500/0 via-orange-500 to-orange-500/0 animate-pulse" />
-        <span className="text-[9px] uppercase tracking-[0.4em] text-gray-500">
-          Scroll Down
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 1 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-3 z-20"
+      >
+        <span
+          className="text-[9px] uppercase tracking-[0.4em] font-medium"
+          style={{ color: "var(--muted)" }}
+        >
+          Scroll
         </span>
-      </div>
+        <div className="w-[1px] h-12 bg-gradient-to-b from-current/0 via-orange-500 to-current/0 animate-pulse" />
+      </motion.div>
     </section>
   );
 }

@@ -1,22 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGestureContext } from "@/context/GestureContext";
-import {
-  Sparkles,
-  MousePointer2,
-  MoveVertical,
-  CheckCircle2,
-  XCircle,
-  Camera,
-  Layers,
-  Touchpad,
-  Hand,
-  MousePointerClick,
-  ScanFace,
-  Magnet,
-} from "lucide-react";
+import { Camera } from "lucide-react";
 
 function useIsLight() {
   const [isLight, setIsLight] = useState(
@@ -125,7 +112,7 @@ export default function GestureController() {
   const instructionsShown = useRef(false);
   const landmarker = useRef(null);
   const faceLandmarker = useRef(null);
-  const { setGestureActive, setHeadRotation, setCursorPos, active, setActive } =
+  const { setGestureActive, setHeadRotation, setCursorPos, active } =
     useGestureContext();
 
   const smoothX = useRef(0);
@@ -655,33 +642,16 @@ export default function GestureController() {
           <div className="absolute inset-0 w-12 h-12 -translate-x-[19px] -translate-y-[19px] rounded-full bg-gradient-radial from-orange-500/20 to-transparent blur-md opacity-60" />
         </div>
       </div>
-      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[200]">
-        <div
-          className={`${isLight ? "bg-white/80 border-gray-200 shadow-xl" : "bg-[#0a0a0a]/90 border-white/10 shadow-2xl"} backdrop-blur-3xl rounded-[24px] sm:rounded-[32px] p-3 sm:p-5 border flex flex-col gap-3 sm:gap-4 min-w-[140px] sm:min-w-[220px] shadow-2xl`}
-        >
-          <div className="flex items-center justify-between px-1">
-            <span
-              className={`text-[10px] font-black ${isLight ? "text-indigo-600" : "text-indigo-400"} tracking-[0.3em] uppercase`}
+      <div className="fixed bottom-20 right-4 sm:bottom-24 sm:right-6 z-[199]">
+        <AnimatePresence>
+          {active && (
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.92 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.92 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className={`relative overflow-hidden rounded-2xl border w-[180px] h-[130px] sm:w-[220px] sm:h-[160px] ${isLight ? "bg-gray-100 border-gray-200" : "bg-black border-white/10"} group shadow-2xl`}
             >
-              Gestures
-            </span>
-            <button
-              onClick={() => setActive(!active)}
-              className={`w-12 h-6 rounded-full transition-all relative ${active ? "bg-indigo-500" : isLight ? "bg-gray-200" : "bg-white/10"}`}
-            >
-              <div
-                className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all shadow-sm ${active ? "left-7" : "left-1"}`}
-              />
-            </button>
-          </div>
-          <AnimatePresence>
-            {active && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 130, opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                className={`relative overflow-hidden rounded-2xl border ${isLight ? "bg-gray-100 border-gray-200" : "bg-black border-white/10"} group`}
-              >
                 <video
                   ref={videoRef}
                   autoPlay
@@ -753,10 +723,9 @@ export default function GestureController() {
                     </button>
                   </div>
                 )}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </>
   );
