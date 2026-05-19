@@ -41,6 +41,20 @@
     "featured": false
   },
   {
+    "id": 8,
+    "title": "PrepHub",
+    "subtitle": "Interview Prep Platform",
+    "year": "2025",
+    "category": "Education",
+    "description": "An interactive, visually stunning platform providing a comprehensive set of curated topics, real interview questions, and interactive visualizers to master core frontend concepts. Built with a premium glassmorphism UI.",
+    "tech": ["React", "TypeScript", "React Router", "Tailwind CSS", "Vite"],
+    "image": "/assets/project8-prephub.png",
+    "demo": "https://prep-hub-seven.vercel.app/",
+    "code": "https://github.com/vedantgour45/prep-hub",
+    "slug": "prephub",
+    "featured": true
+  },
+  {
     "id": 1,
     "title": "Movie Pulse",
     "subtitle": "Movies & TV Shows App",
@@ -54,6 +68,7 @@
     "slug": "movix",
     "featured": true
   },
+
   {
     "id": 2,
     "title": "LinkedIn Clone",
@@ -82,7 +97,7 @@
     "slug": "swiftsuite",
     "featured": true
   },
-    {
+  {
     "id": 6,
     "title": "Personal Portfolio",
     "subtitle": "Cinematic Developer Showcase",

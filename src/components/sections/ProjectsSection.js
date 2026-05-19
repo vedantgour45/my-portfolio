@@ -58,8 +58,8 @@ function ProjectCard({ project, index }) {
             </h3>
             {project.subtitle && (
               <p
-                className="text-[11px] uppercase tracking-widest font-medium mt-2"
-                style={{ color: "var(--muted)" }}
+                className="text-xl font-medium mt-2 cursive text-orange-400 tracking-wide"
+                // style={{ color: "var(--muted)" }}
               >
                 {project.subtitle}
               </p>

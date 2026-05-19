@@ -72,7 +72,7 @@ export default function ContactSection({ personal, socials = [] }) {
           >
             <div className="glass rounded-3xl p-8 flex-1 flex flex-col">
               <div className="display text-3xl mb-1">{personal.name}</div>
-              <p className="text-[11px] uppercase tracking-[0.25em] font-medium text-orange-400 mb-6">
+              <p className="text-xl cursive tracking-wide font-medium text-orange-400 mb-6">
                 {personal.role}
               </p>
               <p
