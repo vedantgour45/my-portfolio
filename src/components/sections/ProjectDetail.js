@@ -8,6 +8,9 @@ export default function ProjectDetail({ project }) {
   const hasImage = Boolean(project.image);
   const hasDemo = Boolean(project.demo);
   const hasCode = Boolean(project.code);
+  const isExtension = project.type === "extension";
+  const demoLabel = isExtension ? "Install Extension" : "Launch Project";
+  const codeLabel = isExtension ? "View on GitHub" : "Source Code";
 
   return (
     <div className="min-h-screen selection:bg-orange-500/30">
@@ -125,7 +128,7 @@ export default function ProjectDetail({ project }) {
                       rel="noopener noreferrer"
                       className="btn btn-primary"
                     >
-                      <span>Launch Project</span>
+                      <span>{demoLabel}</span>
                       <span>↗</span>
                     </a>
                   )}
@@ -136,7 +139,7 @@ export default function ProjectDetail({ project }) {
                       rel="noopener noreferrer"
                       className="btn btn-ghost"
                     >
-                      Source Code
+                      {codeLabel}
                     </a>
                   )}
                 </div>
