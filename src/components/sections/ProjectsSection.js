@@ -112,6 +112,9 @@ export default function ProjectsSection({ projects = [] }) {
   });
   const headlineY = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
+  const mainProjects = projects.filter((p) => p.type !== "extension");
+  const extensions = projects.filter((p) => p.type === "extension");
+
   return (
     <section id="projects" ref={sectionRef} className="section">
       <div className="max-w-7xl mx-auto">
@@ -125,10 +128,35 @@ export default function ProjectsSection({ projects = [] }) {
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-fr">
-          {projects.map((project, i) => (
+          {mainProjects.map((project, i) => (
             <ProjectCard key={project.id} project={project} index={i} />
           ))}
         </div>
+
+        {extensions.length > 0 && (
+          <div className="mt-20">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="mb-8 text-center"
+            >
+              <span className="eyebrow">Browser Extensions & Mini Tools</span>
+              <h3 className="display-tight text-2xl md:text-4xl mt-3 max-w-2xl mx-auto">
+                Small things, shipped{" "}
+                <span className="cursive text-orange-400">sharp</span>
+                <span className="text-orange-500">.</span>
+              </h3>
+            </motion.div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr max-w-5xl mx-auto">
+              {extensions.map((project, i) => (
+                <ProjectCard key={project.id} project={project} index={i} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

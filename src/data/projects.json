@@ -1,5 +1,27 @@
 [
   {
+    "id": 9,
+    "title": "TimeTube",
+    "subtitle": "Watch-Time Intelligence for YouTube",
+    "year": "2026",
+    "category": "Browser Extension",
+    "type": "extension",
+    "description": "A lightweight Chrome extension that injects watch-time intelligence directly into YouTube's native UI. Surfaces playlist totals, remaining time, speed-adjusted durations (1× to 2×), course classification, daily-watch planning, and an analytics modal — all computed locally via DOM scraping with zero external API calls. Built on Manifest V3 with Shadow-DOM isolation, stable ytd-* selector anchoring, coalesced MutationObserver injection, and a dual-tier cache (memory + chrome.storage).",
+    "tech": [
+      "TypeScript",
+      "React",
+      "Vite",
+      "Tailwind CSS",
+      "Chrome Extension (MV3)",
+      "Shadow DOM"
+    ],
+    "image": "/assets/project9-timetube.png",
+    "demo": "https://github.com/vedantgour45/youtube-time-intelligence/releases/latest",
+    "code": "https://github.com/vedantgour45/youtube-time-intelligence",
+    "slug": "timetube",
+    "featured": false
+  },
+  {
     "id": 7,
     "title": "Developer Workspace",
     "subtitle": "Kanban Board & Notes App",
