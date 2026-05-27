@@ -77,6 +77,30 @@
     "featured": true
   },
   {
+    "id": 10,
+    "title": "Akash Panchang",
+    "subtitle": "Cosmic Calendar & 3D Solar System",
+    "year": "2026",
+    "category": "Astronomy",
+    "description": "An immersive, movie-like 3D solar system woven with the Vedic Panchang and live astronomical data. Features a cinematic WebGL hero, location-aware tithi/nakshatra/festival readings, interactive visualizers for moon phases, tides, seasons, and eclipses, plus a Sun & Moon timeline, live sky, weather, and ambient sound.",
+    "tech": [
+      "React",
+      "TypeScript",
+      "Three.js",
+      "React Three Fiber",
+      "GSAP",
+      "Zustand",
+      "React Query",
+      "Tailwind CSS",
+      "Vite"
+    ],
+    "image": "/assets/project10-panchang.png",
+    "demo": "https://aakash-panchang.vercel.app",
+    "code": "https://github.com/vedantgour45/aakash-panchang",
+    "slug": "akash-panchang",
+    "featured": true
+  },
+  {
     "id": 1,
     "title": "Movie Pulse",
     "subtitle": "Movies & TV Shows App",
