@@ -22,6 +22,35 @@
     "featured": false
   },
   {
+    "id": 11,
+    "title": "Shop Avenue",
+    "subtitle": "E-Commerce Platform",
+    "year": "2026",
+    "category": "E-Commerce",
+    "description": "A premium, full-stack e-commerce application built with the MERN stack. Features a responsive storefront with advanced product filtering, cart & wishlist management, OTP-based JWT authentication, Razorpay payment integration, Cloudinary image uploads, and a comprehensive admin dashboard for managing products, categories, orders, and users. Includes analytics, order tracking, and automated email confirmations.",
+    "tech": [
+      "React",
+      "Redux Toolkit",
+      "React Query",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Node.js",
+      "Express",
+      "MongoDB",
+      "Mongoose",
+      "Razorpay",
+      "Cloudinary",
+      "JWT",
+      "Nodemailer",
+      "Canva"
+    ],
+    "image": "/assets/project11-shopavenue.png",
+    "demo": "https://shop-avenue.onrender.com",
+    "code": "https://github.com/vedantgour45/shop-avenue-ecommerce-MERN",
+    "slug": "shop-avenue",
+    "featured": true
+  },
+  {
     "id": 7,
     "title": "Developer Workspace",
     "subtitle": "Kanban Board & Notes App",
