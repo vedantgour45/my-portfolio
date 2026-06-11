@@ -1,9 +1,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { MotionConfig } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import SmoothScroll from "@/components/layout/SmoothScroll";
 import GestureToggle from "@/components/gesture/GestureToggle";
+import CommandPalette from "@/components/layout/CommandPalette";
 import { GestureProvider, useGestureContext } from "@/context/GestureContext";
 
 // Heavy MediaPipe controller — only loads when user opts in.
@@ -19,11 +21,16 @@ function GestureMount() {
 
 export default function ClientLayout({ children }) {
   return (
-    <GestureProvider>
-      <Navbar />
-      <SmoothScroll>{children}</SmoothScroll>
-      <GestureToggle />
-      <GestureMount />
-    </GestureProvider>
+    <MotionConfig reducedMotion="user">
+      <GestureProvider>
+        <SmoothScroll>
+          <Navbar />
+          {children}
+          <CommandPalette />
+          <GestureToggle />
+          <GestureMount />
+        </SmoothScroll>
+      </GestureProvider>
+    </MotionConfig>
   );
 }

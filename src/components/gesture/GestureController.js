@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGestureContext } from "@/context/GestureContext";
+import { useLenis } from "@/components/layout/SmoothScroll";
+import { setTheme, isDarkTheme } from "@/lib/theme";
 import { Camera } from "lucide-react";
 
 function useIsLight() {
@@ -73,9 +75,44 @@ const INSTRUCTIONS = [
   {
     emoji: "↕️",
     action: "Drag Scroll",
-    desc: "Hold pinch and drag vertically to move the page",
+    desc: "Hold pinch and drag vertically — flick for momentum",
     color: "from-purple-400 to-purple-600",
     bg: "bg-purple-500/10",
+  },
+  {
+    emoji: "🖐↔️",
+    action: "Swipe Sections",
+    desc: "Open palm, flick left or right to jump between sections",
+    color: "from-sky-400 to-sky-600",
+    bg: "bg-sky-500/10",
+  },
+  {
+    emoji: "✊🖐",
+    action: "Burst Shuffle",
+    desc: "Make a fist, then snap it open to scatter the floating icons",
+    color: "from-amber-400 to-orange-600",
+    bg: "bg-amber-500/10",
+  },
+  {
+    emoji: "✌️",
+    action: "Shuffle Skills",
+    desc: "Flash a peace sign to re-deal the skill cards",
+    color: "from-emerald-400 to-emerald-600",
+    bg: "bg-emerald-500/10",
+  },
+  {
+    emoji: "👍",
+    action: "Celebrate",
+    desc: "Thumbs up anywhere for a confetti burst",
+    color: "from-green-400 to-green-600",
+    bg: "bg-green-500/10",
+  },
+  {
+    emoji: "🤟",
+    action: "Switch Theme",
+    desc: "Sign “I love you” to flip dark / light",
+    color: "from-pink-400 to-pink-600",
+    bg: "bg-pink-500/10",
   },
   {
     emoji: "👤",
@@ -84,61 +121,184 @@ const INSTRUCTIONS = [
     color: "from-cyan-400 to-cyan-600",
     bg: "bg-cyan-500/10",
   },
-  {
-    emoji: "✨",
-    action: "Magnetic Skills",
-    desc: "Hover over skill cards to pull them forward",
-    color: "from-orange-400 to-orange-600",
-    bg: "bg-orange-500/10",
-  },
 ];
 
-// ── Config ──
-const SMOOTHING = 0.35; // Increased for faster response
-const PINCH_THRESHOLD = 0.05; // Slightly tighter for accuracy
-const PINCH_RELEASE = 0.07;
-const DRAG_SCALE = 3.5; // Increased scroll sensitivity
-const MOUSE_SENSITIVITY = 1.6; // Scale factor for cursor range
+/* ── Config — tuning knobs ─────────────────────────────────────────
+   SMOOTHING            display-rate lerp toward the filtered target
+   PINCH_ENTER/EXIT     thumb–index distance as a fraction of palm
+                        length (wrist→middle knuckle): hysteresis so
+                        the pinch can't flicker at the boundary
+   DRAG_SCALE           scroll px per normalized hand movement
+   MOUSE_SENSITIVITY    cursor range amplification
+   FILTER_*             One Euro filter: MIN_CUTOFF lower = steadier
+                        when still, BETA higher = snappier when fast
+   GESTURE_HOLD_FRAMES  frames a named gesture must persist to count
+   *_COOLDOWN_MS        re-fire guards per action
+   SWIPE_VELOCITY       palm speed (screen-widths/s) that counts as
+                        a swipe
+   MOMENTUM_PROJECTION  seconds of release velocity carried by the
+                        post-drag glide                              */
+const SMOOTHING = 0.35;
+const PINCH_ENTER = 0.38;
+const PINCH_EXIT = 0.55;
+const DRAG_SCALE = 3.5;
+const MOUSE_SENSITIVITY = 1.6;
+const FILTER_MIN_CUTOFF = 1.1;
+const FILTER_BETA = 0.006;
+const GESTURE_HOLD_FRAMES = 5;
+const GESTURE_COOLDOWN_MS = 1500;
+const FIST_BURST_WINDOW_MS = 1500;
+const SWIPE_VELOCITY = 1.5;
+const SWIPE_COOLDOWN_MS = 1500;
+const MOMENTUM_PROJECTION = 0.45;
+const MOMENTUM_MIN_VELOCITY = 250;
+
+/* One Euro filter — adaptive smoothing for pointing: heavy when the
+   hand is still (kills jitter), light when it moves fast (kills lag). */
+class OneEuroFilter {
+  constructor(minCutoff = FILTER_MIN_CUTOFF, beta = FILTER_BETA, dCutoff = 1) {
+    this.minCutoff = minCutoff;
+    this.beta = beta;
+    this.dCutoff = dCutoff;
+    this.xPrev = null;
+    this.dxPrev = 0;
+    this.tPrev = null;
+  }
+  alpha(cutoff, dt) {
+    const tau = 1 / (2 * Math.PI * cutoff);
+    return 1 / (1 + tau / dt);
+  }
+  filter(x, tMs) {
+    if (this.tPrev === null) {
+      this.tPrev = tMs;
+      this.xPrev = x;
+      return x;
+    }
+    const dt = Math.max((tMs - this.tPrev) / 1000, 1e-3);
+    this.tPrev = tMs;
+    const dx = (x - this.xPrev) / dt;
+    const aD = this.alpha(this.dCutoff, dt);
+    this.dxPrev = aD * dx + (1 - aD) * this.dxPrev;
+    const cutoff = this.minCutoff + this.beta * Math.abs(this.dxPrev);
+    const a = this.alpha(cutoff, dt);
+    this.xPrev = a * x + (1 - a) * this.xPrev;
+    return this.xPrev;
+  }
+  reset() {
+    this.xPrev = null;
+    this.dxPrev = 0;
+    this.tPrev = null;
+  }
+}
+
+const CONFETTI_COLORS = ["#fb923c", "#f97316", "#fde68a", "#a7f3d0", "#c4b5fd"];
+
+function ConfettiBurst({ x, y }) {
+  const pieces = useMemo(
+    () =>
+      Array.from({ length: 16 }, (_, i) => {
+        const angle = (i / 16) * Math.PI * 2 + Math.random() * 0.4;
+        const dist = 60 + Math.random() * 90;
+        return {
+          dx: Math.cos(angle) * dist,
+          dy: Math.sin(angle) * dist - 50,
+          rot: 90 + Math.random() * 270,
+          color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+          w: 5 + Math.random() * 4,
+          dur: 1 + Math.random() * 0.3,
+        };
+      }),
+    [],
+  );
+  return (
+    <>
+      {pieces.map((p, i) => (
+        <motion.span
+          key={i}
+          className="absolute rounded-[2px]"
+          style={{
+            left: x,
+            top: y,
+            width: p.w,
+            height: p.w * 0.6,
+            background: p.color,
+          }}
+          initial={{ x: 0, y: 0, opacity: 1, rotate: 0, scale: 1 }}
+          animate={{
+            x: p.dx,
+            y: p.dy + 130,
+            opacity: 0,
+            rotate: p.rot,
+            scale: 0.6,
+          }}
+          transition={{ duration: p.dur, ease: [0.16, 1, 0.3, 1] }}
+        />
+      ))}
+    </>
+  );
+}
 
 export default function GestureController() {
   const isLight = useIsLight();
+  const lenis = useLenis();
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const cursorRef = useRef(null);
-  const cursorLabelRef = useRef(null);
   const [error, setError] = useState(null);
   const [showInstructions, setShowInstructions] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [confetti, setConfetti] = useState([]);
   const instructionsShown = useRef(false);
-  const landmarker = useRef(null);
+  const recognizer = useRef(null);
   const faceLandmarker = useRef(null);
-  const { setGestureActive, setHeadRotation, setCursorPos, active } =
-    useGestureContext();
+  const {
+    setGestureActive,
+    setHeadRotation,
+    setCursorPos,
+    setShuffleTrigger,
+    setSkillsShuffleTrigger,
+    active,
+  } = useGestureContext();
 
   const smoothX = useRef(0);
   const smoothY = useRef(0);
   const targetX = useRef(0);
   const targetY = useRef(0);
+  const filterX = useRef(new OneEuroFilter());
+  const filterY = useRef(new OneEuroFilter());
 
   const isPinched = useRef(false);
   const dragActive = useRef(false);
   const initialPinchY = useRef(null);
   const lastPinchY = useRef(null);
   const lastClickTime = useRef(0);
-  const gestureState = useRef("none");
   const cursorAnimId = useRef(null);
+  const dragVelocity = useRef(0); // px/s, smoothed
+  const lastFrameTime = useRef(0);
+  const handMissingFrames = useRef(0);
+
+  // Named-gesture state machine
+  const pendingGesture = useRef({ name: "None", count: 0 });
+  const lastMeaningful = useRef({ name: "None", at: 0 });
+  const actionTimes = useRef({});
+
+  // Swipe tracking (palm-center x velocity)
+  const previousX = useRef(null);
+  const previousTime = useRef(0);
+  const swipeVel = useRef(0);
+  const lastSwipe = useRef(0);
+
+  // Synthetic hover target
+  const lastHoverEl = useRef(null);
 
   const [facingMode, setFacingMode] = useState("user");
   const [hasMultipleCameras, setHasMultipleCameras] = useState(false);
-  const previousX = useRef(null);
-  const previousTime = useRef(0);
   const streamRef = useRef(null);
 
   const isGesturing = active && !showInstructions;
 
   useEffect(() => {
     setGestureActive(isGesturing);
-    // Keep native cursor visible as requested, but the virtual one will stay for gestures
   }, [isGesturing, setGestureActive]);
 
   useEffect(() => {
@@ -195,6 +355,104 @@ export default function GestureController() {
     const el = document.elementFromPoint(x, y);
     if (el && typeof el.click === "function") {
       el.click();
+    }
+  }, []);
+
+  const spawnConfetti = useCallback((x, y) => {
+    const id = Date.now();
+    setConfetti((b) => [...b, { id, x, y }]);
+    setTimeout(() => setConfetti((b) => b.filter((bb) => bb.id !== id)), 1500);
+  }, []);
+
+  // Swipe → prev/next pager on project pages, prev/next section on home
+  const handleSwipe = useCallback(
+    (dir) => {
+      const pager = document.querySelector('nav[aria-label="More projects"]');
+      if (pager) {
+        const target = [...pager.querySelectorAll("a")].find((a) =>
+          dir === "left"
+            ? a.textContent.includes("Next")
+            : a.textContent.includes("Previous"),
+        );
+        if (target) {
+          target.click();
+          return;
+        }
+      }
+      const sections = [...document.querySelectorAll("section[id]")];
+      if (!sections.length) return;
+      let currentIdx = 0;
+      sections.forEach((s, i) => {
+        if (s.getBoundingClientRect().top <= 120) currentIdx = i;
+      });
+      const nextIdx = Math.min(
+        Math.max(currentIdx + (dir === "left" ? 1 : -1), 0),
+        sections.length - 1,
+      );
+      const el = sections[nextIdx];
+      history.pushState(null, "", `#${el.id}`);
+      if (lenis) lenis.scrollTo(el, { offset: -64, duration: 1.1 });
+      else el.scrollIntoView();
+    },
+    [lenis],
+  );
+
+  // Fire an action at most once per cooldown window
+  const fireAction = useCallback((key, fn, cooldown = GESTURE_COOLDOWN_MS) => {
+    const now = Date.now();
+    if (now - (actionTimes.current[key] || 0) < cooldown) return;
+    actionTimes.current[key] = now;
+    fn();
+  }, []);
+
+  // A named gesture became stable (held GESTURE_HOLD_FRAMES frames)
+  const onStableGesture = useCallback(
+    (name) => {
+      if (name === "None") return;
+      const now = Date.now();
+      const prev = lastMeaningful.current;
+
+      if (
+        name === "Open_Palm" &&
+        prev.name === "Closed_Fist" &&
+        now - prev.at < FIST_BURST_WINDOW_MS
+      ) {
+        fireAction("burst", () => setShuffleTrigger((t) => t + 1));
+      } else if (name === "Victory") {
+        fireAction("skills", () => setSkillsShuffleTrigger((t) => t + 1), 2000);
+      } else if (name === "Thumb_Up") {
+        fireAction(
+          "confetti",
+          () => spawnConfetti(smoothX.current, smoothY.current),
+          1200,
+        );
+      } else if (name === "ILoveYou") {
+        fireAction("theme", () => setTheme(!isDarkTheme()), 3000);
+      }
+
+      lastMeaningful.current = { name, at: now };
+    },
+    [fireAction, setShuffleTrigger, setSkillsShuffleTrigger, spawnConfetti],
+  );
+
+  // Replay the gesture cursor as real hover events so spotlights and
+  // hover previews respond to the hand exactly like they do to a mouse.
+  const dispatchHover = useCallback((x, y) => {
+    const el = document.elementFromPoint(x, y);
+    if (!el) return;
+    const opts = { bubbles: true, clientX: x, clientY: y };
+    el.dispatchEvent(new MouseEvent("mousemove", opts));
+    if (el !== lastHoverEl.current) {
+      lastHoverEl.current?.dispatchEvent(
+        new MouseEvent("mouseout", { ...opts, relatedTarget: el }),
+      );
+      el.dispatchEvent(
+        new MouseEvent("mouseover", {
+          ...opts,
+          relatedTarget: lastHoverEl.current,
+        }),
+      );
+      lastHoverEl.current = el;
     }
   }, []);
 
@@ -266,17 +524,19 @@ export default function GestureController() {
     let isActive = true;
     const init = async () => {
       try {
-        const { HandLandmarker, FaceLandmarker, FilesetResolver } =
+        const { GestureRecognizer, FaceLandmarker, FilesetResolver } =
           await import("@mediapipe/tasks-vision");
         const vision = await FilesetResolver.forVisionTasks(
           "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm",
         );
 
-        const [hL, fL] = await Promise.all([
-          HandLandmarker.createFromOptions(vision, {
+        // GestureRecognizer = HandLandmarker landmarks + classified
+        // gestures (Open_Palm, Closed_Fist, Victory, Thumb_Up, ILoveYou…)
+        const [gR, fL] = await Promise.all([
+          GestureRecognizer.createFromOptions(vision, {
             baseOptions: {
               modelAssetPath:
-                "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
+                "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task",
               delegate: "GPU",
             },
             runningMode: "VIDEO",
@@ -295,7 +555,7 @@ export default function GestureController() {
         ]);
 
         if (isActive) {
-          landmarker.current = hL;
+          recognizer.current = gR;
           faceLandmarker.current = fL;
         }
       } catch (e) {
@@ -322,8 +582,23 @@ export default function GestureController() {
     }
 
     let animationId;
+    let vfcId;
     let isActive = true;
     const videoElement = videoRef.current;
+    const supportsVFC =
+      typeof HTMLVideoElement !== "undefined" &&
+      "requestVideoFrameCallback" in HTMLVideoElement.prototype;
+
+    // Run detection once per camera frame (~30fps), not per display
+    // frame (up to 120fps) — same fidelity, much less main-thread work.
+    const schedule = (cb) => {
+      if (!isActive) return;
+      if (supportsVFC && videoRef.current) {
+        vfcId = videoRef.current.requestVideoFrameCallback(() => cb());
+      } else {
+        animationId = requestAnimationFrame(cb);
+      }
+    };
 
     const start = async () => {
       setIsLoading(true);
@@ -340,7 +615,7 @@ export default function GestureController() {
         // Wait for models if they aren't ready yet
         let attempts = 0;
         while (
-          (!landmarker.current || !faceLandmarker.current) &&
+          (!recognizer.current || !faceLandmarker.current) &&
           attempts < 50
         ) {
           if (!isActive) return;
@@ -348,7 +623,7 @@ export default function GestureController() {
           attempts++;
         }
 
-        if (!landmarker.current || !faceLandmarker.current) {
+        if (!recognizer.current || !faceLandmarker.current) {
           throw new Error(
             "Initialization failed: Hand/Face models could not be loaded. Please try again later.",
           );
@@ -381,16 +656,16 @@ export default function GestureController() {
         setError(null);
 
         const loop = () => {
-          if (
-            !isActive ||
-            !videoRef.current ||
-            videoRef.current.readyState < 2
-          ) {
-            animationId = requestAnimationFrame(loop);
+          if (!isActive) return;
+          if (!videoRef.current || videoRef.current.readyState < 2) {
+            schedule(loop);
             return;
           }
           const now = Date.now();
-          const handResults = landmarker.current.detectForVideo(
+          const dtSec = Math.max((now - lastFrameTime.current) / 1000, 1e-3);
+          lastFrameTime.current = now;
+
+          const results = recognizer.current.recognizeForVideo(
             videoRef.current,
             now,
           );
@@ -399,15 +674,10 @@ export default function GestureController() {
             now,
           );
 
-          const hLm = handResults?.landmarks?.[0];
+          const hLm = results?.landmarks?.[0];
           const fLm = faceResults?.faceLandmarks?.[0];
           if (canvasRef.current)
-            drawSkeletons(
-              handResults,
-              fLm,
-              canvasRef.current,
-              videoRef.current,
-            );
+            drawSkeletons(results, fLm, canvasRef.current, videoRef.current);
 
           // Only process gestures if onboarding is dismissed
           if (isGesturing) {
@@ -421,18 +691,43 @@ export default function GestureController() {
             }
 
             if (hLm) {
+              handMissingFrames.current = 0;
+
+              // ── Named-gesture state machine: a classification must
+              // hold for GESTURE_HOLD_FRAMES consecutive frames ──
+              const gestureName =
+                results?.gestures?.[0]?.[0]?.categoryName || "None";
+              if (gestureName === pendingGesture.current.name) {
+                pendingGesture.current.count++;
+                if (pendingGesture.current.count === GESTURE_HOLD_FRAMES) {
+                  onStableGesture(gestureName);
+                }
+              } else {
+                pendingGesture.current = { name: gestureName, count: 1 };
+              }
+
               const normalizedX = 1 - hLm[8].x;
               const normalizedY = hLm[8].y;
-              const dist = Math.hypot(hLm[4].x - hLm[8].x, hLm[4].y - hLm[8].y);
-              const isCurrentlyPinching = dist < PINCH_THRESHOLD;
+
+              // ── Pinch, normalized by palm length so it works at any
+              // distance from the camera, with hysteresis ──
+              const palm =
+                Math.hypot(hLm[0].x - hLm[9].x, hLm[0].y - hLm[9].y) || 1e-6;
+              const pinchRatio =
+                Math.hypot(hLm[4].x - hLm[8].x, hLm[4].y - hLm[8].y) / palm;
+              const isCurrentlyPinching = isPinched.current
+                ? pinchRatio < PINCH_EXIT
+                : pinchRatio < PINCH_ENTER;
 
               if (!isCurrentlyPinching && !isPinched.current) {
-                targetX.current =
+                const rawX =
                   (0.5 + (normalizedX - 0.5) * MOUSE_SENSITIVITY) *
                   window.innerWidth;
-                targetY.current =
+                const rawY =
                   (0.5 + (normalizedY - 0.5) * MOUSE_SENSITIVITY) *
                   window.innerHeight;
+                targetX.current = filterX.current.filter(rawX, now);
+                targetY.current = filterY.current.filter(rawY, now);
               }
 
               if (isCurrentlyPinching) {
@@ -441,6 +736,7 @@ export default function GestureController() {
                   initialPinchY.current = hLm[8].y;
                   lastPinchY.current = hLm[8].y;
                   dragActive.current = false;
+                  dragVelocity.current = 0;
                 } else {
                   const currentY = hLm[8].y;
                   if (
@@ -448,27 +744,77 @@ export default function GestureController() {
                     Math.abs(currentY - initialPinchY.current) > 0.025
                   ) {
                     dragActive.current = true;
-                    gestureState.current = "drag";
                     lastPinchY.current = currentY;
                   }
                   if (dragActive.current) {
                     const deltaY = currentY - lastPinchY.current;
-                    window.scrollBy({
-                      top: deltaY * window.innerHeight * DRAG_SCALE,
-                      behavior: "auto",
-                    });
+                    const deltaPx = deltaY * window.innerHeight * DRAG_SCALE;
+                    window.scrollBy({ top: deltaPx, behavior: "auto" });
+                    // Smoothed release velocity for the momentum glide
+                    dragVelocity.current =
+                      dragVelocity.current * 0.7 + (deltaPx / dtSec) * 0.3;
                     lastPinchY.current = currentY;
                   }
                 }
               } else {
                 if (isPinched.current) {
-                  if (!dragActive.current)
+                  if (!dragActive.current) {
                     doClick(smoothX.current, smoothY.current);
+                  } else if (
+                    lenis &&
+                    Math.abs(dragVelocity.current) > MOMENTUM_MIN_VELOCITY
+                  ) {
+                    // Flick: carry the release velocity into a glide
+                    lenis.scrollTo(
+                      window.scrollY +
+                        dragVelocity.current * MOMENTUM_PROJECTION,
+                      { duration: 1.1 },
+                    );
+                  }
                   isPinched.current = false;
                   dragActive.current = false;
-                  gestureState.current = "none";
+                  dragVelocity.current = 0;
                 }
               }
+
+              // ── Open-palm swipe: palm-center x velocity ──
+              if (gestureName === "Open_Palm" && !isPinched.current) {
+                const cx = 1 - hLm[9].x;
+                if (previousX.current !== null) {
+                  const v = (cx - previousX.current) / dtSec;
+                  swipeVel.current = swipeVel.current * 0.7 + v * 0.3;
+                  if (
+                    Math.abs(swipeVel.current) > SWIPE_VELOCITY &&
+                    now - lastSwipe.current > SWIPE_COOLDOWN_MS
+                  ) {
+                    lastSwipe.current = now;
+                    const dir = swipeVel.current > 0 ? "right" : "left";
+                    swipeVel.current = 0;
+                    handleSwipe(dir);
+                  }
+                }
+                previousX.current = cx;
+                previousTime.current = now;
+              } else {
+                previousX.current = null;
+                swipeVel.current = 0;
+              }
+
+              // Hover replay — skip while dragging to avoid noise
+              if (!dragActive.current) {
+                dispatchHover(smoothX.current, smoothY.current);
+              }
+            } else {
+              // Hand lost — after ~0.5s let the filters re-acquire from
+              // scratch instead of gliding across the whole screen
+              handMissingFrames.current++;
+              if (handMissingFrames.current === 15) {
+                filterX.current.reset();
+                filterY.current.reset();
+              }
+              previousX.current = null;
+              swipeVel.current = 0;
+              pendingGesture.current = { name: "None", count: 0 };
             }
           }
 
@@ -480,8 +826,7 @@ export default function GestureController() {
             });
           }
 
-          // Label update removed as per request to hide dot
-          animationId = requestAnimationFrame(loop);
+          schedule(loop);
         };
         loop();
       } catch (e) {
@@ -495,6 +840,9 @@ export default function GestureController() {
     return () => {
       isActive = false;
       cancelAnimationFrame(animationId);
+      if (supportsVFC && videoElement && vfcId) {
+        videoElement.cancelVideoFrameCallback?.(vfcId);
+      }
       // Stop all camera tracks — streamRef always holds the real stream even
       // if the toggle happened before the async getUserMedia call resolved.
       streamRef.current?.getTracks().forEach((t) => t.stop());
@@ -509,6 +857,10 @@ export default function GestureController() {
     isGesturing,
     setCursorPos,
     facingMode,
+    lenis,
+    onStableGesture,
+    handleSwipe,
+    dispatchHover,
   ]);
 
   return (
@@ -551,13 +903,17 @@ export default function GestureController() {
                 </p>
               </div>
 
-              {/* Grid Content - Perfect scrolling */}
-              <div className="p-3 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-1.5 md:gap-3 overflow-y-auto">
+              {/* Grid Content - Perfect scrolling (data-lenis-prevent so
+                  the wheel works inside while Lenis runs the page) */}
+              <div
+                data-lenis-prevent=""
+                className="p-3 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-1.5 md:gap-3 overflow-y-auto"
+              >
                 {INSTRUCTIONS.map((i, idx) => (
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 * idx }}
+                    transition={{ delay: 0.06 * idx }}
                     key={i.action}
                     className={`flex items-center gap-2 md:gap-4 p-2.5 md:p-4 rounded-xl md:rounded-2xl border transition-all duration-300
                       ${
@@ -621,6 +977,14 @@ export default function GestureController() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Confetti bursts (👍) */}
+      <div className="fixed inset-0 z-[9999] pointer-events-none">
+        {confetti.map((b) => (
+          <ConfettiBurst key={b.id} x={b.x} y={b.y} />
+        ))}
+      </div>
+
       {/* Fiery Gesture Cursor - Igniting Hand Tracking */}
       <div
         ref={cursorRef}
@@ -713,13 +1077,10 @@ export default function GestureController() {
                       {error}
                     </span>
                     <button
-                      onClick={() => {
-                        setError(null);
-                        start();
-                      }}
+                      onClick={() => setError(null)}
                       className={`mt-3 px-3 py-1.5 ${isLight ? "bg-gray-100 hover:bg-gray-200" : "bg-white/10 hover:bg-white/20"} rounded-lg text-[8px] uppercase tracking-tighter font-bold transition-colors`}
                     >
-                      Retry Connection
+                      Dismiss
                     </button>
                   </div>
                 )}

@@ -33,8 +33,12 @@ module.exports = {
           800: "#111114",
           900: "#0a0a0b",
         },
+        // Theme-aware accent — resolves through CSS variables so dark/light
+        // each get a contrast-tuned value. Supports opacity modifiers.
         accent: {
-          DEFAULT: "#fb923c",
+          DEFAULT: "rgb(var(--accent-rgb) / <alpha-value>)",
+          // Darker variant tuned for small text on light backgrounds (AA).
+          strong: "var(--accent-text)",
           50: "#fff7ed",
           100: "#ffedd5",
           400: "#fb923c",

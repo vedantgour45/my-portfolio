@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo } from "react";
 import { motion } from "framer-motion";
@@ -54,7 +54,7 @@ function DateBox({ start, end, current }) {
     <div className="glass rounded-xl px-3 py-3 flex flex-col items-center text-center shrink-0 w-[96px]">
       {/* Start */}
       <div>
-        <div className="text-[9px] uppercase tracking-[0.25em] font-medium text-orange-400">
+        <div className="text-[10px] uppercase tracking-[0.25em] font-medium text-accent-strong">
           {startMonth}
         </div>
         <div className="display text-xl md:text-2xl leading-none mt-0.5">
@@ -63,7 +63,7 @@ function DateBox({ start, end, current }) {
       </div>
 
       {/* Separator */}
-      <div className="my-2 w-6 h-px bg-orange-500/40" />
+      <div className="my-2 w-6 h-px bg-accent/40" />
 
       {/* End */}
       <div>
@@ -73,7 +73,7 @@ function DateBox({ start, end, current }) {
           </div>
         ) : (
           <>
-            <div className="text-[9px] uppercase tracking-[0.25em] font-medium text-orange-400">
+            <div className="text-[10px] uppercase tracking-[0.25em] font-medium text-accent-strong">
               {endMonth}
             </div>
             <div className="display text-xl md:text-2xl leading-none mt-0.5">
@@ -91,17 +91,17 @@ function MainCard({ entry }) {
   return (
     <div className="glass rounded-xl p-4 md:p-5 flex-1 min-w-0">
       <div className="flex items-center gap-2 mb-3">
-        <div className="w-6 h-6 rounded-md bg-orange-500/10 border border-orange-500/20 flex items-center justify-center shrink-0">
-          <Icon className="w-3 h-3 text-orange-500" />
+        <div className="w-6 h-6 rounded-md bg-accent/10 border border-accent/20 flex items-center justify-center shrink-0">
+          <Icon className="w-3 h-3 text-accent" />
         </div>
         <span
-          className="text-[9px] uppercase tracking-[0.3em] font-medium"
+          className="text-[10px] uppercase tracking-[0.3em] font-medium"
           style={{ color: "var(--muted)" }}
         >
           {entry.kind === "experience" ? "Experience" : "Education"}
         </span>
         {entry.current && (
-          <span className="ml-auto text-[8px] uppercase tracking-[0.2em] font-medium px-1.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+          <span className="ml-auto text-[10px] uppercase tracking-[0.2em] font-medium px-1.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
             Current
           </span>
         )}
@@ -110,7 +110,7 @@ function MainCard({ entry }) {
       <h3 className="display-tight text-lg md:text-xl leading-tight">
         {entry.title}
       </h3>
-      <p className="text-[11px] uppercase tracking-[0.2em] font-medium text-orange-400 mt-1.5">
+      <p className="text-[11px] uppercase tracking-[0.2em] font-medium text-accent-strong mt-1.5">
         {entry.org}
       </p>
       {entry.location && (
@@ -167,7 +167,7 @@ function DesktopRow({ entry, side, index }) {
 
       {/* Center — dot */}
       <div className="flex items-center justify-center relative">
-        <span className="w-3 h-3 rounded-full bg-orange-500 ring-4 ring-orange-500/15" />
+        <span className="w-3 h-3 rounded-full bg-accent ring-4 ring-accent/15" />
       </div>
 
       {/* Right half */}
@@ -203,7 +203,7 @@ function MobileRow({ entry, index }) {
       className="relative pl-12"
     >
       {/* Dot */}
-      <span className="absolute left-[14px] top-5 w-3 h-3 rounded-full bg-orange-500 ring-4 ring-orange-500/15 -translate-x-1/2" />
+      <span className="absolute left-[14px] top-5 w-3 h-3 rounded-full bg-accent ring-4 ring-accent/15 -translate-x-1/2" />
 
       <div className="flex items-stretch gap-3">
         <DateBox
@@ -235,15 +235,15 @@ export default function CareerSection({ experience = [], education = [] }) {
           <span className="eyebrow">Journey</span>
           <h2 className="display-tight text-4xl md:text-6xl mt-4 max-w-3xl mx-auto">
             Where I&apos;ve been and{" "}
-            <span className="cursive text-orange-400">what I learned</span>
-            <span className="text-orange-500">.</span>
+            <span className="cursive text-accent-strong">what I learned</span>
+            <span className="text-accent">.</span>
           </h2>
         </div>
 
         {/* ── Desktop: alternating ──────────────────────── */}
         <div className="hidden md:block relative max-w-5xl mx-auto">
           {/* Central vertical line — solid, visible, runs through every dot */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-orange-500/30 -translate-x-1/2" />
+          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-accent/30 -translate-x-1/2" />
           <ul className="relative space-y-5">
             {timeline.map((entry, i) => (
               <DesktopRow
@@ -258,7 +258,7 @@ export default function CareerSection({ experience = [], education = [] }) {
 
         {/* ── Mobile: single column ─────────────────────── */}
         <div className="md:hidden relative">
-          <div className="absolute left-[14px] top-0 bottom-0 w-px bg-orange-500/30" />
+          <div className="absolute left-[14px] top-0 bottom-0 w-px bg-accent/30" />
           <ul className="relative space-y-5">
             {timeline.map((entry, i) => (
               <MobileRow key={entry.id} entry={entry} index={i} />

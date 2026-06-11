@@ -9,8 +9,14 @@ const GestureContext = createContext({
   setActive: () => {},
   headRotation: { yaw: 0, pitch: 0 },
   setHeadRotation: () => {},
+  // Incremented on ✊→🖐 burst — HeroScene scatters/re-deals the particles
   shuffleTrigger: 0,
   setShuffleTrigger: () => {},
+  // Incremented on ✌️ — SkillsSection re-deals the skill chips
+  skillsShuffleTrigger: 0,
+  setSkillsShuffleTrigger: () => {},
+  cursorPos: { x: 0.5, y: 0.5 },
+  setCursorPos: () => {},
 });
 
 export function GestureProvider({ children }) {
@@ -18,6 +24,7 @@ export function GestureProvider({ children }) {
   const [active, setActive] = useState(false);
   const [headRotation, setHeadRotation] = useState({ yaw: 0, pitch: 0 });
   const [shuffleTrigger, setShuffleTrigger] = useState(0);
+  const [skillsShuffleTrigger, setSkillsShuffleTrigger] = useState(0);
   const [cursorPos, setCursorPos] = useState({ x: 0.5, y: 0.5 });
 
   return (
@@ -31,6 +38,8 @@ export function GestureProvider({ children }) {
         setHeadRotation,
         shuffleTrigger,
         setShuffleTrigger,
+        skillsShuffleTrigger,
+        setSkillsShuffleTrigger,
         cursorPos,
         setCursorPos,
       }}
