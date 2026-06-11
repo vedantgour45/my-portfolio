@@ -10,12 +10,13 @@ export default function AboutSection({ personal }) {
   const imageContainerRef = useRef(null);
   const { gestureActive, headRotation } = useGestureContext();
 
-  // Scroll-driven parallax
+  // Scroll-driven parallax — text only. The photo stays put: its only
+  // motion is the head-tilt effect, and that runs solely when the user
+  // has gesture controls switched on.
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
-  const imgY = useTransform(scrollYProgress, [0, 1], [80, -80]);
   const textY = useTransform(scrollYProgress, [0, 1], [60, -60]);
 
   // Head-tilt 3D effect
@@ -40,19 +41,16 @@ export default function AboutSection({ personal }) {
           <span className="eyebrow">About</span>
           <h2 className="display-tight text-4xl md:text-6xl mt-4 max-w-3xl mx-auto">
             Building polished frontend experiences with{" "}
-            <span className="cursive text-orange-400">
+            <span className="cursive text-accent-strong">
               attention to every detail
             </span>{" "}
-            <span className="text-orange-500">.</span>
+            <span className="text-accent">.</span>
           </h2>
         </div>
 
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           {/* Image */}
-          <motion.div
-            style={{ y: imgY }}
-            className="lg:col-span-5 lg:sticky lg:top-28"
-          >
+          <div className="lg:col-span-5 lg:sticky lg:top-28">
             <div
               ref={imageContainerRef}
               className="relative aspect-[4/5] max-w-md mx-auto rounded-2xl overflow-hidden"
@@ -67,7 +65,7 @@ export default function AboutSection({ personal }) {
                 priority={false}
               />
             </div>
-          </motion.div>
+          </div>
 
           {/* Text */}
           <motion.div style={{ y: textY }} className="lg:col-span-7 space-y-6">

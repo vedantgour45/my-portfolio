@@ -7,11 +7,16 @@
    ═══════════════════════════════════════════════════ */
 @layer base {
   :root {
+    color-scheme: dark;
     --bg: #050507;
     --bg-elev: #0d0d12;
     --fg: #f5f5f7;
     --muted: #8e8e93;
     --accent: #fb923c;
+    /* Space-separated RGB so Tailwind opacity modifiers work: rgb(var(--accent-rgb) / 0.4) */
+    --accent-rgb: 251 146 60;
+    /* Accent tuned for small text — same as accent in dark, darker in light for AA contrast */
+    --accent-text: #fb923c;
     --accent-soft: rgba(251, 146, 60, 0.12);
     --line: rgba(255, 255, 255, 0.08);
     /* Hero starfield icon tint — orange in dark, soft grey in light */
@@ -19,14 +24,17 @@
   }
 
   .light {
+    color-scheme: light;
     --bg: #f7f6f3;
     --bg-elev: #ffffff;
     --fg: #111114;
     --muted: #6b6b70;
-    --accent: #f97316;
+    --accent: #ea580c;
+    --accent-rgb: 234 88 12;
+    --accent-text: #c2410c;
     --accent-soft: rgba(249, 115, 22, 0.1);
     --line: rgba(0, 0, 0, 0.08);
-    --hero-icon: #6b7280;
+    --hero-icon: #34363c;
   }
 
   html {
@@ -43,7 +51,7 @@
     overflow-x: hidden;
   }
 
-  /* Cinematic background gradient */
+  /* Cinematic background gradient — single warm accent, no competing hues */
   body::before {
     content: "";
     position: fixed;
@@ -52,15 +60,15 @@
     z-index: -1;
     background:
       radial-gradient(60% 50% at 50% 0%, rgba(251, 146, 60, 0.08) 0%, transparent 60%),
-      radial-gradient(40% 40% at 90% 100%, rgba(99, 102, 241, 0.06) 0%, transparent 70%),
-      radial-gradient(50% 40% at 10% 100%, rgba(168, 85, 247, 0.05) 0%, transparent 70%);
+      radial-gradient(45% 40% at 90% 100%, rgba(251, 146, 60, 0.04) 0%, transparent 70%),
+      radial-gradient(50% 40% at 10% 100%, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
   }
 
   .light body::before {
     background:
       radial-gradient(60% 50% at 50% 0%, rgba(249, 115, 22, 0.06) 0%, transparent 60%),
-      radial-gradient(40% 40% at 90% 100%, rgba(99, 102, 241, 0.05) 0%, transparent 70%),
-      radial-gradient(50% 40% at 10% 100%, rgba(168, 85, 247, 0.04) 0%, transparent 70%);
+      radial-gradient(45% 40% at 90% 100%, rgba(249, 115, 22, 0.04) 0%, transparent 70%),
+      radial-gradient(50% 40% at 10% 100%, rgba(0, 0, 0, 0.02) 0%, transparent 70%);
   }
 
   /* Grain overlay */
@@ -76,8 +84,15 @@
   }
 
   ::selection {
-    background: var(--accent);
+    background: rgb(var(--accent-rgb));
     color: #0a0a0b;
+  }
+
+  /* Visible keyboard focus everywhere — never rely on browser defaults */
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent-rgb));
+    outline-offset: 3px;
+    border-radius: 4px;
   }
 }
 
@@ -136,18 +151,62 @@
     -webkit-backdrop-filter: blur(20px) saturate(140%);
   }
 
-  /* Gradient text */
+  /* Gradient text — tonal sweep within the single accent hue */
   .text-gradient {
-    background: linear-gradient(90deg, #fb923c 0%, #a855f7 50%, #6366f1 100%);
+    background: linear-gradient(100deg, #ffb46b 0%, #fb923c 45%, #f97316 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
+  .light .text-gradient {
+    background: linear-gradient(100deg, #f97316 0%, #ea580c 50%, #c2410c 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  /* Skip link — hidden until keyboard-focused */
+  .skip-link {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 2000;
+    padding: 10px 20px;
+    border-radius: 9999px;
+    background: rgb(var(--accent-rgb));
+    color: #0a0a0b;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transform: translateY(calc(-100% - 16px));
+    transition: transform 0.2s ease;
+  }
+  .skip-link:focus-visible {
+    transform: translateY(0);
+  }
+
+  /* Scrolled navbar — theme-aware glass (was hardcoded black in both themes) */
+  .nav-scrolled {
+    background: color-mix(in srgb, var(--bg) 72%, transparent);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* Cursor-tracking spotlight on cards — driven by --mx/--my set in JS */
+  .card-spotlight {
+    background: radial-gradient(
+      380px circle at var(--mx, 50%) var(--my, 0%),
+      rgb(var(--accent-rgb) / 0.12),
+      transparent 70%
+    );
+  }
+
   /* Button base */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-[11px] uppercase font-medium transition-all duration-300;
-    letter-spacing: 0.25em;
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-xs uppercase font-medium transition-all duration-300;
+    letter-spacing: 0.2em;
   }
 
   .btn-primary {
@@ -240,10 +299,55 @@
   top: 0;
   left: 0;
   height: 2px;
-  background: linear-gradient(90deg, #fb923c, #a855f7, #6366f1);
+  background: linear-gradient(90deg, rgb(var(--accent-rgb) / 0.7), rgb(var(--accent-rgb)));
   transform-origin: left;
   z-index: 1000;
   pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════
+   THEME TOGGLE — weather-front sweep via the View
+   Transitions API: the new theme washes in from the
+   top-right corner (where the toggle lives) and rolls
+   diagonally to the bottom-left behind a wide feathered
+   gradient edge — light changing like weather, no hard
+   line. Scoped to html.theme-vt so page-navigation
+   transitions keep their snappy default cross-fade.
+
+   Mechanics: the old theme's snapshot holds still
+   underneath while the new view is revealed through a
+   soft diagonal mask whose position slides across a 3×
+   oversized gradient — mask-position interpolates
+   smoothly everywhere masks are supported.
+   ═══════════════════════════════════════════════════ */
+@keyframes theme-sweep {
+  from {
+    -webkit-mask-position: 0% 100%;
+    mask-position: 0% 100%;
+  }
+  to {
+    -webkit-mask-position: 100% 0%;
+    mask-position: 100% 0%;
+  }
+}
+
+html.theme-vt::view-transition-old(root) {
+  /* keep the outgoing theme fully visible beneath the sweep */
+  animation: none;
+}
+
+html.theme-vt::view-transition-new(root) {
+  animation: theme-sweep 2000ms cubic-bezier(0.5, 0.05, 0.4, 0.95) both;
+  -webkit-mask-image: linear-gradient(
+    to bottom left,
+    #000 32%,
+    transparent 68%
+  );
+  mask-image: linear-gradient(to bottom left, #000 32%, transparent 68%);
+  -webkit-mask-size: 300% 300%;
+  mask-size: 300% 300%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
 /* ═══════════════════════════════════════════════════
@@ -273,17 +377,11 @@ html.lenis body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(251, 146, 60, 0.25);
+  background: rgb(var(--accent-rgb) / 0.25);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(251, 146, 60, 0.5);
-}
-.light ::-webkit-scrollbar-thumb {
-  background: rgba(249, 115, 22, 0.2);
-}
-.light ::-webkit-scrollbar-thumb:hover {
-  background: rgba(249, 115, 22, 0.4);
+  background: rgb(var(--accent-rgb) / 0.5);
 }
 
 /* ═══════════════════════════════════════════════════
@@ -310,15 +408,15 @@ canvas {
 .gesture-cursor-ring {
   width: 40px;
   height: 40px;
-  border: 2px solid rgba(251, 146, 60, 0.6);
+  border: 2px solid rgb(var(--accent-rgb) / 0.6);
   border-radius: 50%;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   box-shadow:
-    0 0 15px rgba(251, 146, 60, 0.15),
-    inset 0 0 8px rgba(251, 146, 60, 0.08);
+    0 0 15px rgb(var(--accent-rgb) / 0.15),
+    inset 0 0 8px rgb(var(--accent-rgb) / 0.08);
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
@@ -329,13 +427,13 @@ canvas {
 .gesture-cursor-dot {
   width: 6px;
   height: 6px;
-  background: #fb923c;
+  background: rgb(var(--accent-rgb));
   border-radius: 50%;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 6px rgba(251, 146, 60, 0.5);
+  box-shadow: 0 0 6px rgb(var(--accent-rgb) / 0.5);
 }
 
 .gesture-cursor-label {
@@ -343,11 +441,11 @@ canvas {
   top: -20px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #fb923c;
+  color: rgb(var(--accent-rgb));
   white-space: nowrap;
 }
 

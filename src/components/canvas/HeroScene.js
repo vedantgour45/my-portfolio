@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import skills from "@/data/skills.json";
 import { getIcon } from "@/lib/icons";
+import { useGestureContext } from "@/context/GestureContext";
 
 // Pool of unique icons referenced anywhere in the skills data.
 const ICON_POOL = (() => {
@@ -18,9 +19,37 @@ const ICON_POOL = (() => {
     .filter(Boolean);
 })();
 
-// Resolved per-theme via the --hero-icon CSS variable in globals.css
+// Resolved per-theme via CSS variables in globals.css
 const ICON_COLOR = "var(--hero-icon)";
-const ACCENT = "#fb923c";
+const ACCENT = "rgb(var(--accent-rgb))";
+
+/* ═══ Tuning knobs — adjust to taste ═══════════════════════════════
+   size/sizeVar      px — every particle gets size = min + rand·var,
+                     so the range is [sizeMin, sizeMin + sizeVar]
+   opacity/…Var      0–1, same min + rand·var pattern
+   durMin/durVar     seconds for one full crossing — LARGER = slower
+   countDesktop/…    how many particles spawn per breakpoint
+   Icon color per theme lives in globals.css as --hero-icon.        */
+const ICONS = {
+  countDesktop: 24,
+  countMobile: 14,
+  sizeMin: 10, // was 8
+  sizeVar: 9, //  was 7  → icons now 10–19px (were 8–15px)
+  opacityMin: 0.18, // was 0.12
+  opacityVar: 0.18, // was 0.16 → now 0.18–0.36 (was 0.12–0.28)
+  durMin: 60,
+  durVar: 70,
+};
+const DOTS = {
+  countDesktop: 22,
+  countMobile: 14,
+  sizeMin: 1.5,
+  sizeVar: 1.5,
+  opacityMin: 0.25,
+  opacityVar: 0.25,
+  durMin: 28,
+  durVar: 36,
+};
 
 function makeRand(seed) {
   let s = seed;
@@ -43,8 +72,8 @@ function shuffle(arr, rand) {
  * via `left`/`top` and animate `x`/`y` (GPU-accelerated transforms) — much
  * cheaper than animating layout properties.
  */
-function buildParticles(iconCount, dotCount) {
-  const rand = makeRand(7);
+function buildParticles(iconCount, dotCount, seed = 7) {
+  const rand = makeRand(seed);
   const total = iconCount + dotCount;
 
   const crossPool = shuffle(
@@ -62,31 +91,32 @@ function buildParticles(iconCount, dotCount) {
   for (let i = 0; i < iconCount; i++, p++) {
     const Icon = ICON_POOL[Math.floor(rand() * ICON_POOL.length)];
     if (!Icon) continue;
-    const dur = 60 + rand() * 70;
+    const dur = ICONS.durMin + rand() * ICONS.durVar;
     out.push({
       kind: "icon",
       key: `i${i}`,
       Icon,
       axis: axisPool[p],
       cross: crossPool[p],
-      size: 8 + rand() * 7,
-      opacity: 0.12 + rand() * 0.16,
+      size: ICONS.sizeMin + rand() * ICONS.sizeVar,
+      opacity: ICONS.opacityMin + rand() * ICONS.opacityVar,
       dur,
       delay: -rand() * dur,
     });
   }
 
   for (let i = 0; i < dotCount; i++, p++) {
-    const dur = 28 + rand() * 36;
-    const tint = rand() < 0.7 ? ACCENT : "#ffffff";
+    const dur = DOTS.durMin + rand() * DOTS.durVar;
+    // Neutral dots use --muted so they stay visible in light mode too
+    const tint = rand() < 0.7 ? ACCENT : "var(--muted)";
     out.push({
       kind: "dot",
       key: `d${i}`,
       color: tint,
       axis: axisPool[p],
       cross: crossPool[p],
-      size: 1.5 + rand() * 1.5,
-      opacity: 0.25 + rand() * 0.25,
+      size: DOTS.sizeMin + rand() * DOTS.sizeVar,
+      opacity: DOTS.opacityMin + rand() * DOTS.opacityVar,
       dur,
       delay: -rand() * dur,
     });
@@ -170,6 +200,24 @@ function Particle({ p }) {
 
 export default function HeroScene() {
   const [reduced, setReduced] = useState(false);
+  const { shuffleTrigger, cursorPos } = useGestureContext();
+  // ✊→🖐 gesture burst — ripple from the hand cursor + re-deal particles
+  const [burst, setBurst] = useState(null);
+
+  // Pointer parallax — the whole particle field drifts gently away from
+  // the cursor, springs keep it organic.
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const px = useSpring(mx, { stiffness: 40, damping: 18, mass: 0.6 });
+  const py = useSpring(my, { stiffness: 40, damping: 18, mass: 0.6 });
+
+  useEffect(() => {
+    if (shuffleTrigger > 0) {
+      setBurst({ id: shuffleTrigger, x: cursorPos.x, y: cursorPos.y });
+    }
+    // cursorPos intentionally read at trigger time only
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shuffleTrigger]);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -179,23 +227,75 @@ export default function HeroScene() {
     return () => mq.removeEventListener?.("change", h);
   }, []);
 
+  useEffect(() => {
+    if (reduced) return;
+    const onMove = (e) => {
+      mx.set((e.clientX / window.innerWidth - 0.5) * -28);
+      my.set((e.clientY / window.innerHeight - 0.5) * -20);
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [reduced, mx, my]);
+
+  // Re-seeding on shuffleTrigger deals every particle a fresh trajectory
   const particles = useMemo(() => {
     const isSmall =
       typeof window !== "undefined" && window.innerWidth < 768;
-    // Reduced from 40 / 36 → much cheaper to animate
-    const iconCount = isSmall ? 14 : 24;
-    const dotCount = isSmall ? 14 : 22;
-    return buildParticles(iconCount, dotCount);
-  }, []);
+    const iconCount = isSmall ? ICONS.countMobile : ICONS.countDesktop;
+    const dotCount = isSmall ? DOTS.countMobile : DOTS.countDesktop;
+    return buildParticles(iconCount, dotCount, 7 + shuffleTrigger * 31);
+  }, [shuffleTrigger]);
 
   return (
     <div className="absolute inset-0 z-0 overflow-hidden">
       {/* Deep-space backdrop */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(251,146,60,0.05),transparent_55%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_80%,rgba(99,102,241,0.04),transparent_55%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgb(var(--accent-rgb)/0.05),transparent_55%)]" />
 
-      {!reduced &&
-        particles.map((p) => <Particle key={p.key} p={p} />)}
+      {!reduced && (
+        <motion.div
+          style={{ x: px, y: py }}
+          className="absolute inset-0 scale-105"
+        >
+          <motion.div
+            key={shuffleTrigger}
+            initial={shuffleTrigger > 0 ? { opacity: 0 } : false}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            className="absolute inset-0"
+          >
+            {particles.map((p) => (
+              <Particle key={p.key} p={p} />
+            ))}
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Gesture-burst shockwave ring */}
+      <AnimatePresence>
+        {burst && (
+          <motion.div
+            key={burst.id}
+            aria-hidden="true"
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              left: `${burst.x * 100}%`,
+              top: `${burst.y * 100}%`,
+              border: "2px solid rgb(var(--accent-rgb) / 0.5)",
+              boxShadow: "inset 0 0 60px rgb(var(--accent-rgb) / 0.2)",
+            }}
+            initial={{ width: 0, height: 0, opacity: 0.9, x: "-50%", y: "-50%" }}
+            animate={{
+              width: "120vmax",
+              height: "120vmax",
+              opacity: 0,
+              x: "-50%",
+              y: "-50%",
+            }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            onAnimationComplete={() => setBurst(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

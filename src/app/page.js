@@ -26,7 +26,7 @@ export default async function Home() {
     ]);
 
   return (
-    <main className="w-full">
+    <main id="main" className="w-full">
       <HeroSection personal={personal} />
       <AboutSection personal={personal} />
       <SkillsSection categories={skills} />
